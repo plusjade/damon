@@ -42,17 +42,11 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 
 namespace :deploy do
   after :published, :restart do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
+    on roles(:all) do
       within current_path do
-        puts "HELLOOOOOOO"
-        puts current_path
-        execute("pwd")
-        execute("chown -R rails:rails #{current_path}/tmp")
+        execute("chown -R rails:rails /home/rails-app/shared/tmp")
       end
+
       within release_path do
         execute("/etc/init.d/unicorn restart")
       end
