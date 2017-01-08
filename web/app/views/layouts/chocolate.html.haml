@@ -1,7 +1,10 @@
 !!! 5
 %html
   %head
-    %title= "Yo Yo"
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    %title= "DamonBot"
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='//fonts.googleapis.com/css?family=News+Cycle:400,700' rel='stylesheet' type='text/css'>
+    = stylesheet_link_tag 'chocolate', media: 'all'
+    = csrf_meta_tags
   %body
     = yield
