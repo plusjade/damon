@@ -1,1 +1,4 @@
-Rails.application.config.assets.precompile += %w( chocolate.css )
+Rails.application.config.assets.precompile += %w(
+  chocolate.css
+  app.js
+)
