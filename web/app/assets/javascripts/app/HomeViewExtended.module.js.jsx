@@ -1,12 +1,12 @@
-const HomeView = (props) => {
+import SectionView from "app/SectionView"
+const HomeViewExtended = (props) => {
   return (
     <div>
       <h1>{props.course.title}</h1>
-      <ul>
       {props.sections.map((section) => {
         return (
-          <li key={section.id}>
-            <a
+          <div key={section.id}>
+            <h3
               href="#"
               onClick={(e) => {
                 e.preventDefault()
@@ -14,13 +14,16 @@ const HomeView = (props) => {
               }}
             >
               {section.name}
-            </a>
-          </li>
+            </h3>
+            <SectionView
+              {...props}
+              {...section}
+            />
+          </div>
         )
       })}
-      </ul>
     </div>
   )
 }
 
-export default HomeView
+export default HomeViewExtended

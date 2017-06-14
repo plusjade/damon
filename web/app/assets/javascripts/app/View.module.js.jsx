@@ -1,5 +1,6 @@
 import SectionView from "app/SectionView"
 import HomeView from "app/HomeView"
+import HomeViewExtended from "app/HomeViewExtended"
 import PracticeView from "app/PracticeView"
 import PracticeOneView from "app/PracticeOneView"
 
@@ -47,7 +48,7 @@ const View = (props) => {
     )
   } else {
     view = (
-      <HomeView {...props} />
+      <HomeViewExtended {...props} />
     )
   }
 
