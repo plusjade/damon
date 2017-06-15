@@ -1,4 +1,4 @@
-import Autobot from './Autobot'
+import Autobot from 'ace/lib/Autobot'
 
 const Player = (Component, editor) => {
   const autobot = Autobot(editor)
@@ -107,8 +107,8 @@ const Player = (Component, editor) => {
       this.setChunkPosition(chunkPosition)
     },
 
-    isPlaying() {
-      return !!this.playInterval
+    isPaused() {
+      return !this.tickInterval
     },
 
     render() {
@@ -120,7 +120,7 @@ const Player = (Component, editor) => {
           pause={this.pause}
           replay={this.replay}
           seekTo={this.seekTo}
-          isPlaying={this.isPlaying()}
+          isPaused={this.isPaused()}
         />
       )
     }

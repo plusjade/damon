@@ -1,7 +1,11 @@
-import IconPause              from './IconPause'
-import IconPlay               from './IconPlay'
+import IconPause              from 'ace/ui/IconPause'
+import IconRecord             from 'ace/ui/IconRecord'
 
 const RecorderView = (props) => {
+  function formatTime(milliseconds) {
+    return (milliseconds/1000.0).toFixed(1)
+  }
+
   return (
     <div>
       <div
@@ -14,10 +18,15 @@ const RecorderView = (props) => {
         }}
         onClick={(e) => {
           e.preventDefault()
-          props.record()
+          if (props.isPaused) {
+            props.record()
+          }
+          else {
+            props.pause()
+          }
         }}
       >
-        {props.isRecording ? <IconPause /> : <IconPlay />}
+        {props.isPaused ? <IconRecord /> : <IconPause />}
       </div><div
         style={{
           display: "inline-block",
@@ -38,7 +47,13 @@ const RecorderView = (props) => {
           color: "#FFF"
         }}
       >
-        000
+        <small>
+          {`${formatTime(props.timePosition)}`}
+        </small>
+
+        <span onClick={() => { props.toggle() }}>
+          toggle
+        </span>
       </div>
     </div>
   )
