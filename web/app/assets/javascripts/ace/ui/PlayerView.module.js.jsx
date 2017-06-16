@@ -64,9 +64,6 @@ const PlayerView = (props) => {
         <small>
           {`${formatTime(props.timePosition)}/${formatTime(props.timeDuration)}`}
         </small>
-        <span onClick={() => { props.toggle() }}>
-          toggle
-        </span>
       </div>
     </div>
   )

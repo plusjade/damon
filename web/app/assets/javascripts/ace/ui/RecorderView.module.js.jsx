@@ -1,4 +1,5 @@
 import IconPause              from 'ace/ui/IconPause'
+import IconPlay               from 'ace/ui/IconPlay'
 import IconRecord             from 'ace/ui/IconRecord'
 
 const RecorderView = (props) => {
@@ -30,12 +31,15 @@ const RecorderView = (props) => {
       </div><div
         style={{
           display: "inline-block",
-          width: "80%",
           boxSizing: "border-box",
           padding: "10px",
-          verticalAlign: "top"
+          verticalAlign: "top",
+          textAlign: "center",
+          color: "#FFF"
       }}>
-        --
+        <span>
+          {`${formatTime(props.timePosition)}`}
+        </span>
       </div>
       <div
         style={{
@@ -47,13 +51,23 @@ const RecorderView = (props) => {
           color: "#FFF"
         }}
       >
-        <small>
-          {`${formatTime(props.timePosition)}`}
-        </small>
-
+      {props.isPaused && props.hasRecording && (
         <span onClick={() => { props.toggle() }}>
-          toggle
+          <IconPlay />
         </span>
+      )}
+      </div>
+      <div
+        style={{
+          display: "inline-block",
+          width: "10%",
+          boxSizing: "border-box",
+          padding: "10px",
+          verticalAlign: "top",
+          color: "#FFF"
+        }}
+      >
+        -
       </div>
     </div>
   )

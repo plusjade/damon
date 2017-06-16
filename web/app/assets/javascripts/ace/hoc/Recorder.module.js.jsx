@@ -141,6 +141,7 @@ const Recorder = (Component, editor) => {
     },
 
     record() {
+      editor.focus()
       this.setTimeStart()
       this.tickInterval = setInterval(() => {
         this.updateTimePosition()
@@ -156,10 +157,17 @@ const Recorder = (Component, editor) => {
         timeStart: undefined,
         timePositionPaused: time || this.getTimePosition()
       })
+      if (this.isPaused && this.hasRecording) {
+        this.props.save()
+      }
     },
 
     isPaused() {
       return !this.tickInterval
+    },
+
+    hasRecording() {
+      return window.commands.length > 0
     },
 
     render() {
@@ -171,6 +179,7 @@ const Recorder = (Component, editor) => {
           record={this.record}
           pause={this.pause}
           isPaused={this.isPaused()}
+          hasRecording={this.hasRecording()}
         />
       )
     }
