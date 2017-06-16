@@ -1,7 +1,15 @@
 import Autobot from 'ace/lib/Autobot'
 
-const Player = (Component, editor) => {
+const Player = (Component) => {
+  window.commands = []
+  const editor = window.editor = ace.edit("editor")
+
+  editor.setTheme("ace/theme/monokai")
+  editor.getSession().setMode("ace/mode/javascript")
+  editor.getSession().setUseSoftTabs(true)
+
   const autobot = Autobot(editor)
+
 
   const Player = React.createClass({
     propTypes: {
@@ -25,6 +33,13 @@ const Player = (Component, editor) => {
 
     componentWillMount() {
       this.playInterval = undefined
+    },
+
+    componentWillReceiveProps(nextProps) {
+      console.log("componentWillReceiveProps")
+      if (nextProps.test !== this.props.test) {
+        this.play()
+      }
     },
 
     resetState() {
@@ -108,7 +123,14 @@ const Player = (Component, editor) => {
     },
 
     isPaused() {
-      return !this.tickInterval
+      return !this.playInterval
+    },
+
+    playVideo(videoId) {
+      this.pause()
+      this.resetState()
+      editor.setValue()
+      this.props.playVideo(videoId)
     },
 
     render() {
@@ -116,6 +138,7 @@ const Player = (Component, editor) => {
         <Component
           {...this.props}
           {...this.state}
+          playVideo={this.playVideo}
           play={this.play}
           pause={this.pause}
           replay={this.replay}

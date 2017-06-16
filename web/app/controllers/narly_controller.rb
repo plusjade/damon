@@ -1,6 +1,8 @@
 class NarlyController < ActionController::Base
   layout "chocolate"
 
-  def index
+  def play
+  end
+  def make
   end
 end

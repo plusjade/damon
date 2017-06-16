@@ -1,5 +1,6 @@
 import IconPause              from 'ace/ui/IconPause'
 import IconPlay               from 'ace/ui/IconPlay'
+import Recordings             from 'ace/ui/Recordings'
 
 const PlayerView = (props) => {
   function formatTime(milliseconds) {
@@ -65,6 +66,12 @@ const PlayerView = (props) => {
           {`${formatTime(props.timePosition)}/${formatTime(props.timeDuration)}`}
         </small>
       </div>
+      {props.videos && (
+        <Recordings
+          list={props.videos}
+          onSelect={props.playVideo}
+        />
+      )}
     </div>
   )
 }
