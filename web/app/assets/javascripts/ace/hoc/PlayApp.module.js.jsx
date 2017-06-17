@@ -1,19 +1,19 @@
 import Commands             from 'ace/lib/Commands'
-import DB                   from 'ace/lib/DB'
-
+import VideosDB             from 'ace/lib/VideosDB'
 import withPlay             from 'ace/hoc/withPlay'
 
 import Player               from 'ace/ui/Player'
-import Recordings           from 'ace/ui/Recordings'
+import VideosList           from 'ace/ui/VideosList'
 
 const PlayerView = withPlay(Player)
+const Video = VideosDB()
 
 const App = React.createClass({
   initialState() {
     return ({
       commands: [],
-      videoId: parseInt(window.location.hash.substring(1)),
-      videos: this.videosList(),
+      videoId: window.location.hash.substring(1),
+      videos: Video.list(),
     })
   },
 
@@ -23,7 +23,7 @@ const App = React.createClass({
 
   componentWillMount() {
     if (this.state.videoId) {
-      const commands = this.findVideo(this.state.videoId)
+      const commands = Video.find(this.state.videoId)
       if (commands) {
         this.setState({commands: commands})
       }
@@ -34,30 +34,15 @@ const App = React.createClass({
     return this.state.commands && this.state.commands.length > 0
   },
 
-  videosList() {
-    return Object.keys(localStorage)
-  },
-
-  findVideo(videoId) {
-    let json = localStorage.getItem(videoId)
-    if (json) {
-      return JSON.parse(json)
-    } else if (DB[videoId]) {
-      return DB[videoId]
-    } else {
-      return null
-    }
-  },
-
   loadVideo(videoId) {
-    const commands = this.findVideo(videoId)
+    const commands = Video.find(videoId)
     if (commands) {
       this.setState({commands: commands, videoId: videoId})
     }
   },
 
   refreshVideos() {
-    this.setState({videos: this.videosList()})
+    this.setState({videos: Video.list()})
   },
 
   renderPlayer() {
@@ -82,7 +67,7 @@ const App = React.createClass({
       <div>
         {this.renderPlayer()}
         {this.state.videos && (
-          <Recordings
+          <VideosList
             list={this.state.videos}
             onSelect={this.loadVideo}
           />

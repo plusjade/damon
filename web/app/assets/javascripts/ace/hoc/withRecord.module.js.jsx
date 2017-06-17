@@ -1,7 +1,12 @@
-const Recorder = (Component, editor) => {
+const withRecord = (Component) => {
+  window.commands = []
+  window.editor = this.editor = ace.edit("editor")
+  editor.setTheme("ace/theme/monokai")
+  editor.getSession().setMode("ace/mode/javascript")
+  editor.getSession().setUseSoftTabs(true)
   let synchronizedTime = undefined
 
-  const Recorder = React.createClass({
+  const withRecord = React.createClass({
     propTypes: {
     },
 
@@ -185,7 +190,7 @@ const Recorder = (Component, editor) => {
     }
   })
 
-  return Recorder
+  return withRecord
 }
 
-export default Recorder
+export default withRecord

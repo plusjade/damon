@@ -35,6 +35,10 @@ const Play = (Component) => {
       this.playInterval = undefined
     },
 
+    componentWillMount() {
+      this.play()
+    },
+
     componentWillReceiveProps(nextProps) {
       console.log("componentWillReceiveProps")
       if (nextProps.videoId !== this.props.videoId) {
