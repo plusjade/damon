@@ -10,12 +10,12 @@ const Player = (Component) => {
 
   const autobot = Autobot(editor)
 
-
   const Player = React.createClass({
     propTypes: {
       chunksUpTo: React.PropTypes.func.isRequired,
       nextChunk: React.PropTypes.func.isRequired,
       timeDuration: React.PropTypes.number.isRequired,
+      videoId: React.PropTypes.string,
     },
 
     initialState() {
@@ -37,13 +37,17 @@ const Player = (Component) => {
 
     componentWillReceiveProps(nextProps) {
       console.log("componentWillReceiveProps")
-      if (nextProps.test !== this.props.test) {
-        this.play()
+      if (nextProps.videoId !== this.props.videoId) {
+        this.replay()
       }
     },
 
     resetState() {
       this.setState(this.initialState())
+    },
+
+    isPaused() {
+      return !this.playInterval
     },
 
     getChunkPosition() {
@@ -74,18 +78,26 @@ const Player = (Component) => {
       this.setState({timePosition: time || this.getTimePosition()})
     },
 
-    replay() {
-      this.pause()
+    setStart() {
+      this.clearTicker()
       this.resetState()
       editor.setValue()
       autobot.setCursor({row: 0, column: 0})
-      this.play()
+    },
+
+    clearTicker() {
+      clearInterval(this.playInterval)
+      this.playInterval = undefined
     },
 
     pause(time) {
-      clearInterval(this.playInterval)
-      this.playInterval = undefined
+      this.clearTicker()
       this.setState({timePositionPaused: time || this.state.timePosition})
+    },
+
+    replay() {
+      this.setStart()
+      this.play()
     },
 
     play() {
@@ -122,23 +134,11 @@ const Player = (Component) => {
       this.setChunkPosition(chunkPosition)
     },
 
-    isPaused() {
-      return !this.playInterval
-    },
-
-    playVideo(videoId) {
-      this.pause()
-      this.resetState()
-      editor.setValue()
-      this.props.playVideo(videoId)
-    },
-
     render() {
       return (
         <Component
           {...this.props}
           {...this.state}
-          playVideo={this.playVideo}
           play={this.play}
           pause={this.pause}
           replay={this.replay}

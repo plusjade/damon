@@ -1,6 +1,33 @@
 import IconPause              from 'ace/ui/IconPause'
 import IconPlay               from 'ace/ui/IconPlay'
-import Recordings             from 'ace/ui/Recordings'
+
+const Style = {
+  one: {
+    display: "inline-block",
+    width: "10%",
+    boxSizing: "border-box",
+    padding: "10px",
+    verticalAlign: "top"
+  },
+  two: {
+    display: "inline-block",
+    width: "80%",
+    boxSizing: "border-box",
+    padding: "10px",
+    verticalAlign: "top"
+  },
+  three: {
+    display: "inline-block",
+    width: "10%",
+    boxSizing: "border-box",
+    padding: "10px",
+    verticalAlign: "top",
+    color: "#FFF"
+  },
+  rangeInput: {
+    width: "100%"
+  }
+}
 
 const PlayerView = (props) => {
   function formatTime(milliseconds) {
@@ -10,13 +37,7 @@ const PlayerView = (props) => {
   return (
     <div>
       <div
-        style={{
-          display: "inline-block",
-          width: "10%",
-          boxSizing: "border-box",
-          padding: "10px",
-          verticalAlign: "top"
-        }}
+        style={Style.one}
         onClick={(e) => {
           e.preventDefault()
           if (props.isPaused) {
@@ -30,16 +51,9 @@ const PlayerView = (props) => {
         }}
       >
         {props.isPaused ? <IconPlay /> : <IconPause />}
-      </div><div
-        style={{
-          display: "inline-block",
-          width: "80%",
-          boxSizing: "border-box",
-          padding: "10px",
-          verticalAlign: "top"
-      }}>
+      </div><div style={Style.two}>
         <input
-          style={{width: "100%"}}
+          style={Style.rangeInput}
           type="range"
           min="0"
           max={props.timeDuration}
@@ -52,26 +66,11 @@ const PlayerView = (props) => {
           }}
         />
       </div>
-      <div
-        style={{
-          display: "inline-block",
-          width: "10%",
-          boxSizing: "border-box",
-          padding: "10px",
-          verticalAlign: "top",
-          color: "#FFF"
-        }}
-      >
+      <div style={Style.three}>
         <small>
           {`${formatTime(props.timePosition)}/${formatTime(props.timeDuration)}`}
         </small>
       </div>
-      {props.videos && (
-        <Recordings
-          list={props.videos}
-          onSelect={props.playVideo}
-        />
-      )}
     </div>
   )
 }

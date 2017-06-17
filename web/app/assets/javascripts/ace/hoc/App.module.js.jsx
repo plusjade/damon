@@ -2,22 +2,31 @@ import Commands             from 'ace/lib/Commands'
 import DB                   from 'ace/lib/DB'
 
 import Player               from 'ace/hoc/Player'
+
 import PlayerView           from 'ace/ui/PlayerView'
+import Recordings           from 'ace/ui/Recordings'
 
 const View = Player(PlayerView)
 
 const App = React.createClass({
-  getInitialState() {
+  initialState() {
     return ({
-      videoId: parseInt(window.location.hash.substring(1)),
       commands: [],
-      videos: Object.keys(localStorage),
+      videoId: parseInt(window.location.hash.substring(1)),
+      videos: this.videosList(),
     })
+  },
+
+  getInitialState() {
+    return (this.initialState())
   },
 
   componentWillMount() {
     if (this.state.videoId) {
-      this.setState({commands: DB[this.state.videoId]})
+      const commands = this.findVideo(this.state.videoId)
+      if (commands) {
+        this.setState({commands: commands})
+      }
     }
   },
 
@@ -25,30 +34,60 @@ const App = React.createClass({
     return this.state.commands && this.state.commands.length > 0
   },
 
-  clearCommands() {
-    this.setState({commands: []})
+  videosList() {
+    return Object.keys(localStorage)
   },
 
-  playVideo(videoId) {
-    console.log("playVideo")
-    const json = localStorage.getItem(videoId)
-    this.setState({commands: JSON.parse(json), test: videoId})
+  findVideo(videoId) {
+    let json = localStorage.getItem(videoId)
+    if (json) {
+      return JSON.parse(json)
+    } else if (DB[videoId]) {
+      return DB[videoId]
+    } else {
+      return null
+    }
+  },
+
+  loadVideo(videoId) {
+    const commands = this.findVideo(videoId)
+    if (commands) {
+      this.setState({commands: commands, videoId: videoId})
+    }
   },
 
   refreshVideos() {
-    this.setState({videos: Object.keys(localStorage)})
+    this.setState({videos: this.videosList()})
+  },
+
+  renderPlayer() {
+    if (this.isPlayable()) {
+      const props = Object.assign({
+                      loadVideo: this.loadVideo,
+                      videos: this.state.videos,
+                      videoId: this.state.videoId,
+                    }, Commands(this.state.commands))
+      return (
+        <View {...props} />
+      )
+    } else {
+      return (
+        <div style={{height: "60px"}}/>
+      )
+    }
   },
 
   render() {
-    const data = this.isPlayable() ? Commands(this.state.commands) : {}
-    const props = Object.assign({
-      playVideo: this.playVideo,
-      videos: this.state.videos,
-      test: this.state.test,
-    }, data)
-
     return (
-      <View {...props}/>
+      <div>
+        {this.renderPlayer()}
+        {this.state.videos && (
+          <Recordings
+            list={this.state.videos}
+            onSelect={this.loadVideo}
+          />
+        )}
+      </div>
     )
   }
 })
