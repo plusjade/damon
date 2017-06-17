@@ -1,6 +1,6 @@
 import Autobot from 'ace/lib/Autobot'
 
-const Player = (Component) => {
+const Play = (Component) => {
   window.commands = []
   const editor = window.editor = ace.edit("editor")
 
@@ -10,7 +10,7 @@ const Player = (Component) => {
 
   const autobot = Autobot(editor)
 
-  const Player = React.createClass({
+  const Play = React.createClass({
     propTypes: {
       chunksUpTo: React.PropTypes.func.isRequired,
       nextChunk: React.PropTypes.func.isRequired,
@@ -149,7 +149,7 @@ const Player = (Component) => {
     }
   })
 
-  return Player
+  return Play
 }
 
-export default Player
+export default Play

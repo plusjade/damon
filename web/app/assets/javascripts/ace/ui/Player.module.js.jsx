@@ -29,7 +29,7 @@ const Style = {
   }
 }
 
-const PlayerView = (props) => {
+const Player = (props) => {
   function formatTime(milliseconds) {
     return (milliseconds/1000.0).toFixed(1)
   }
@@ -75,4 +75,4 @@ const PlayerView = (props) => {
   )
 }
 
-export default PlayerView
+export default Player

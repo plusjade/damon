@@ -1,12 +1,12 @@
 import Commands             from 'ace/lib/Commands'
 import DB                   from 'ace/lib/DB'
 
-import Player               from 'ace/hoc/Player'
+import withPlay             from 'ace/hoc/withPlay'
 
-import PlayerView           from 'ace/ui/PlayerView'
+import Player               from 'ace/ui/Player'
 import Recordings           from 'ace/ui/Recordings'
 
-const View = Player(PlayerView)
+const PlayerView = withPlay(Player)
 
 const App = React.createClass({
   initialState() {
@@ -68,7 +68,7 @@ const App = React.createClass({
                       videoId: this.state.videoId,
                     }, Commands(this.state.commands))
       return (
-        <View {...props} />
+        <PlayerView {...props} />
       )
     } else {
       return (
