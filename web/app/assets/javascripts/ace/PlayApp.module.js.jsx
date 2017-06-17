@@ -1,9 +1,9 @@
 import Commands             from 'ace/lib/Commands'
 import VideosDB             from 'ace/lib/VideosDB'
-import withPlay             from 'ace/hoc/withPlay'
+import withPlay             from 'ace/withPlay'
 
-import Player               from 'ace/ui/Player'
-import VideosList           from 'ace/ui/VideosList'
+import Player               from 'ace/components/Player'
+import VideosList           from 'ace/components/VideosList'
 
 const PlayerView = withPlay(Player)
 const Video = VideosDB()

@@ -1,6 +1,6 @@
-import IconPause              from 'ace/ui/IconPause'
-import IconPlay               from 'ace/ui/IconPlay'
-import IconRecord             from 'ace/ui/IconRecord'
+import IconPause              from './IconPause'
+import IconPlay               from './IconPlay'
+import IconRecord             from './IconRecord'
 
 const Recorder = (props) => {
   function formatTime(milliseconds) {

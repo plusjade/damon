@@ -1,5 +1,5 @@
-import IconPause              from 'ace/ui/IconPause'
-import IconPlay               from 'ace/ui/IconPlay'
+import IconPause              from './IconPause'
+import IconPlay               from './IconPlay'
 
 const Style = {
   one: {

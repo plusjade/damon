@@ -1,9 +1,9 @@
 import Commands             from 'ace/lib/Commands'
 import VideosDB             from 'ace/lib/VideosDB'
+import withRecord           from 'ace/withRecord'
 
-import withRecord           from 'ace/hoc/withRecord'
-import Recorder             from 'ace/ui/Recorder'
-import VideosList           from 'ace/ui/VideosList'
+import Recorder             from 'ace/components/Recorder'
+import VideosList           from 'ace/components/VideosList'
 
 const RecorderView = withRecord(Recorder)
 const Videos = VideosDB()
