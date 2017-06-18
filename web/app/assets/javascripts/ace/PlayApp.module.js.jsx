@@ -1,5 +1,7 @@
 import Commands             from 'ace/lib/Commands'
 import VideosDB             from 'ace/lib/VideosDB'
+import QueryParams          from 'ace/lib/QueryParams'
+
 import withPlay             from 'ace/withPlay'
 
 import Player               from 'ace/components/Player'
@@ -7,12 +9,13 @@ import VideosList           from 'ace/components/VideosList'
 
 const PlayerView = withPlay(Player)
 const Video = VideosDB()
+const QParams = QueryParams()
 
 const App = React.createClass({
   initialState() {
     return ({
       commands: [],
-      videoId: window.location.hash.substring(1),
+      videoId: QParams.get("id"),
       videos: Video.list(),
     })
   },
@@ -37,6 +40,7 @@ const App = React.createClass({
   loadVideo(videoId) {
     const commands = Video.find(videoId)
     if (commands) {
+      history.replaceState({}, null, `/play?id=${videoId}`)
       this.setState({commands: commands, videoId: videoId})
     }
   },

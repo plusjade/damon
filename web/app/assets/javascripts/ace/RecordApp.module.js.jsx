@@ -1,5 +1,7 @@
 import Commands             from 'ace/lib/Commands'
 import VideosDB             from 'ace/lib/VideosDB'
+import QueryParams          from 'ace/lib/QueryParams'
+
 import withRecord           from 'ace/withRecord'
 
 import Recorder             from 'ace/components/Recorder'
@@ -7,11 +9,12 @@ import VideosList           from 'ace/components/VideosList'
 
 const RecorderView = withRecord(Recorder)
 const Videos = VideosDB()
+const QParams = QueryParams()
 
 const App = React.createClass({
   getInitialState() {
     return ({
-      videoId: window.location.hash.substring(1),
+      videoId: QParams.get("id"),
       commands: [],
       videos: Videos.list(),
       recordingId: undefined
@@ -49,13 +52,12 @@ const App = React.createClass({
   },
 
   newRecording() {
-    console.log("newRecording")
     this.clearCommands()
     this.setState({recordingId: this.getTimeNow()})
   },
 
   loadVideo(videoId) {
-    window.open(`/play#${videoId}`, "_blank")
+    window.open(`/play?id=${videoId}`, "_blank")
     return
     const commands = Videos.find(videoId)
     if (commands) {
