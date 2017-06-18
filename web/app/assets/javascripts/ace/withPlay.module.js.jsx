@@ -1,15 +1,6 @@
 import Autobot from 'ace/lib/Autobot'
 
 const Play = (Component) => {
-  window.commands = []
-  const editor = window.editor = ace.edit("editor")
-
-  editor.setTheme("ace/theme/monokai")
-  editor.getSession().setMode("ace/mode/javascript")
-  editor.getSession().setUseSoftTabs(true)
-
-  const autobot = Autobot(editor)
-
   const Play = React.createClass({
     propTypes: {
       chunksUpTo: React.PropTypes.func.isRequired,
@@ -35,7 +26,9 @@ const Play = (Component) => {
       this.playInterval = undefined
     },
 
-    componentWillMount() {
+    componentDidMount() {
+      this.editor = this.props.getEditor()
+      this.autobot = Autobot(this.editor)
       this.play()
     },
 
@@ -85,8 +78,8 @@ const Play = (Component) => {
     setStart() {
       this.clearTicker()
       this.resetState()
-      editor.setValue("")
-      autobot.setCursor({row: 0, column: 0})
+      this.editor.setValue("")
+      this.autobot.setCursor({row: 0, column: 0})
     },
 
     clearTicker() {
@@ -114,7 +107,7 @@ const Play = (Component) => {
         const {chunk, chunkPosition} = this.props.nextChunk(time, this.getChunkPosition())
 
         if (chunk) {
-          chunk.forEach((c) => { autobot.runCommand(c) })
+          chunk.forEach((c) => { this.autobot.runCommand(c) })
           this.setChunkPosition(chunkPosition)
           if (time >= this.props.timeDuration) {
             this.pause()
@@ -127,11 +120,11 @@ const Play = (Component) => {
     seekTo(time) {
       this.pause(time)
       this.updateTimePosition(time)
-      editor.setValue("")
+      this.editor.setValue("")
 
       const chunkPosition = (
         this.props.chunksUpTo(time, (chunk) => {
-          chunk.forEach((c) => { autobot.runCommand(c) })
+          chunk.forEach((c) => { this.autobot.runCommand(c) })
         })
       )
 

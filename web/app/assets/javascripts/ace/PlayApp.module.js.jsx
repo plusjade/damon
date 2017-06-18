@@ -4,6 +4,7 @@ import QueryParams          from 'ace/lib/QueryParams'
 
 import withPlay             from 'ace/withPlay'
 
+import AceEditor            from 'ace/components/AceEditor'
 import Player               from 'ace/components/Player'
 import VideosList           from 'ace/components/VideosList'
 
@@ -55,6 +56,7 @@ const App = React.createClass({
                       loadVideo: this.loadVideo,
                       videos: this.state.videos,
                       videoId: this.state.videoId,
+                      getEditor: this.getEditor
                     }, Commands(this.state.commands))
       return (
         <PlayerView {...props} />
@@ -66,16 +68,34 @@ const App = React.createClass({
     }
   },
 
+  editorRef(node) {
+    this.editorNode = node
+  },
+
+  getEditor() {
+    if (this.editor) { return this.editor }
+    if (!this.editorNode) { return }
+    this.editor = window.editor = ace.edit(this.editorNode)
+    this.editor.setTheme("ace/theme/twilight")
+    this.editor.getSession().setMode("ace/mode/javascript")
+    this.editor.getSession().setUseSoftTabs(true)
+
+    return this.editor
+  },
+
   render() {
     return (
       <div>
-        {this.renderPlayer()}
+        <AceEditor editorRef={this.editorRef} />
+        <div id="panel">
+          {this.renderPlayer()}
         {this.state.videos && (
           <VideosList
             list={this.state.videos}
             onSelect={this.loadVideo}
           />
         )}
+        </div>
       </div>
     )
   }
