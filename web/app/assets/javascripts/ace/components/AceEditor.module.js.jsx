@@ -14,7 +14,6 @@ const AceEditor = (props) => {
     <div
       style={Style.default}
       ref={props.editorRef}
-      id="editor"
     >
       {props.code}
     </div>

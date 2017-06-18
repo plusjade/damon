@@ -6,6 +6,7 @@ import withPlay             from 'ace/withPlay'
 
 import AceEditor            from 'ace/components/AceEditor'
 import Player               from 'ace/components/Player'
+import Previewer            from 'ace/components/Previewer'
 import VideosList           from 'ace/components/VideosList'
 
 const PlayerView = withPlay(Player)
@@ -29,7 +30,7 @@ const App = React.createClass({
     if (this.state.videoId) {
       const commands = Video.find(this.state.videoId)
       if (commands) {
-        this.setState({commands: commands})
+        this.loadCommands(commands)
       }
     }
   },
@@ -38,34 +39,22 @@ const App = React.createClass({
     return this.state.commands && this.state.commands.length > 0
   },
 
+  loadCommands(commands) {
+    const state = Object.assign({commands: commands}, Commands(commands))
+    this.setState(state)
+  },
+
   loadVideo(videoId) {
     const commands = Video.find(videoId)
     if (commands) {
       history.replaceState({}, null, `/play?id=${videoId}`)
-      this.setState({commands: commands, videoId: videoId})
+      this.loadCommands(commands)
+      this.setState({videoId: videoId})
     }
   },
 
   refreshVideos() {
     this.setState({videos: Video.list()})
-  },
-
-  renderPlayer() {
-    if (this.isPlayable()) {
-      const props = Object.assign({
-                      loadVideo: this.loadVideo,
-                      videos: this.state.videos,
-                      videoId: this.state.videoId,
-                      getEditor: this.getEditor
-                    }, Commands(this.state.commands))
-      return (
-        <PlayerView {...props} />
-      )
-    } else {
-      return (
-        <div style={{height: "60px"}}/>
-      )
-    }
   },
 
   editorRef(node) {
@@ -86,13 +75,64 @@ const App = React.createClass({
   render() {
     return (
       <div>
-        <AceEditor editorRef={this.editorRef} />
-        <div id="panel">
-          {this.renderPlayer()}
-        {this.state.videos && (
-          <VideosList
-            list={this.state.videos}
-            onSelect={this.loadVideo}
+        <div style={{
+            width: "100%",
+            height: "500px",
+          }}
+        >
+          <div style={{
+              width: "40%",
+              height: "inherit",
+              border: "3px solid #444",
+              position: "relative",
+              display: "inline-block",
+              verticalAlign: "top",
+              boxSizing: "border-box",
+            }}
+          >
+            <AceEditor editorRef={this.editorRef} />
+          </div><div style={{
+              height: "inherit",
+              width: "40%",
+              border: "3px solid #444",
+              borderLeft: 0,
+              display: "inline-block",
+              verticalAlign: "top",
+              boxSizing: "border-box",
+            }}
+          >
+            <Previewer />
+          </div><div style={{
+              height: "400px",
+              width: "20%",
+              display: "inline-block",
+              verticalAlign: "top",
+              boxSizing: "border-box",
+            }}
+          >
+          {this.state.videos && (
+            <VideosList
+              list={this.state.videos}
+              onSelect={this.loadVideo}
+            />
+          )}
+          </div>
+        </div>
+
+        <div style={{
+            width: "80%",
+            height: "60px",
+            zIndex: 2,
+            backgroundColor: "#222",
+          }}
+        >
+        {this.isPlayable() && (
+          <PlayerView
+            videoId={this.state.videoId}
+            getEditor={this.getEditor}
+            chunksUpTo={this.state.chunksUpTo}
+            nextChunk={this.state.nextChunk}
+            timeDuration={this.state.timeDuration}
           />
         )}
         </div>

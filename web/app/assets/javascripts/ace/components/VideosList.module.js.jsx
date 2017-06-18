@@ -1,6 +1,6 @@
 const VideosList = (props) => {
   return (
-    <ul style={{color: "#FFF"}}>
+    <ul style={{color: "#BDBDBD", textAlign: "right", listStyle: "none"}}>
     {props.list.map((v, i) => {
       return (
         <li key={i}>

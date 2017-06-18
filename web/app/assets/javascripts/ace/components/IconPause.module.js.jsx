@@ -1,7 +1,7 @@
 const IconPause = (props) => {
   return (
     <svg
-      style={{height: 40, width: 40, cursor: "pointer", fill: "#FFF"}}
+      style={{height: 40, width: 40, cursor: "pointer", fill: "#E0E0E0"}}
       x="0px" y="0px" viewBox="0 0 90 112.5"
     >
       <g transform="translate(0,-962.36218)">
