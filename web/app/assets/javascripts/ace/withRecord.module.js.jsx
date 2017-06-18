@@ -1,9 +1,5 @@
 const withRecord = (Component) => {
   window.commands = []
-  window.editor = this.editor = ace.edit("editor")
-  editor.setTheme("ace/theme/monokai")
-  editor.getSession().setMode("ace/mode/javascript")
-  editor.getSession().setUseSoftTabs(true)
   let synchronizedTime = undefined
 
   const withRecord = React.createClass({
@@ -28,6 +24,7 @@ const withRecord = (Component) => {
     },
 
     componentDidMount() {
+      this.editor = this.props.getEditor()
       this.listen()
     },
 
@@ -61,7 +58,7 @@ const withRecord = (Component) => {
     },
 
     listen() {
-      editor.session.doc.on("change", this.listenChange, true)
+      this.editor.session.doc.on("change", this.listenChange, true)
       editor
         .selection
         .addEventListener("changeCursor", this.listenChangeCursor, true)
@@ -71,9 +68,9 @@ const withRecord = (Component) => {
     },
 
     unListen() {
-      editor.session.doc.off("change", this.listenChange)
-      editor.selection.removeEventListener("changeCursor", this.listenChangeCursor)
-      editor.selection.removeEventListener("changeSelection", this.listenSelect)
+      this.editor.session.doc.off("change", this.listenChange)
+      this.editor.selection.removeEventListener("changeCursor", this.listenChangeCursor)
+      this.editor.selection.removeEventListener("changeSelection", this.listenSelect)
     },
 
     listenChange(e) {
@@ -102,13 +99,13 @@ const withRecord = (Component) => {
     },
 
     listenChangeCursor() {
-      if (editor.selection.isEmpty()) {
+      if (this.editor.selection.isEmpty()) {
         this.listenSelect()
       }
     },
 
     listenSelect() {
-      const curRange = editor.selection.getRange()
+      const curRange = this.editor.selection.getRange()
       const start = curRange.start
       const end = curRange.end
       this.log(
@@ -147,7 +144,7 @@ const withRecord = (Component) => {
     },
 
     record() {
-      editor.focus()
+      this.editor.focus()
       this.setTimeStart()
       this.tickInterval = setInterval(() => {
         this.updateTimePosition()

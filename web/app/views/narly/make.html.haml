@@ -2,36 +2,13 @@
   body {
     background: #333;
   }
-  #editor {
-      margin: 0;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-  }
-  #panel {
-    position: absolute;
-    bottom: -60px;
-    height: 60px;
-    right: 0;
-    left: 0;
-    z-index: 2;
-    background-color: #222;
-  }
   #player {
-    height: 400px;
-    max-width: 800px;
-    border: 1px solid #333;
-    position: relative;
-    margin: 20px auto 50px;
+    margin: 20px 30px;
+    min-width: 800px;
   }
 %script{src: "https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js"}
-
 #player
-  #editor
-  #panel
 
 :javascript
   const RecordApp = require("ace/RecordApp")
-  ReactDOM.render(React.createElement(RecordApp), document.getElementById("panel"))
+  ReactDOM.render(React.createElement(RecordApp), document.getElementById("player"))
