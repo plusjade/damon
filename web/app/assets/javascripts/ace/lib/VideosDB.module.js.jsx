@@ -1,12 +1,8 @@
-import DB                   from 'ace/lib/DB'
-
 const Videos = () => {
   function find(videoId) {
     let json = window.localStorage.getItem(videoId)
     if (json) {
       return JSON.parse(json)
-    } else if (DB[videoId]) {
-      return DB[videoId]
     } else {
       return null
     }

@@ -1,37 +1,22 @@
 const Autobot = (editor) => {
   let handlers = {}
 
-  function insertText(startRow, startCol, endRow, endCol, data) {
-    const delta = {
-      action: "insertText",
-      range: makeRange(startRow, startCol, endRow, endCol),
-      text: data
-    }
+  function insert(startRow, startCol, endRow, endCol, data) {
+    const delta = Object.assign({
+                      action: "insert",
+                      lines: data,
+                    },
+                    makeRange(startRow, startCol, endRow, endCol)
+                  )
+
     editor.session.doc.applyDeltas([delta])
   }
 
-  function insertLines(startRow, startCol, endRow, endCol, data) {
-    const delta = {
-      action: "insertLines",
-      range: makeRange(startRow, startCol, endRow, endCol),
-      lines: data
-    }
-    editor.session.doc.applyDeltas([delta])
-  }
-
-  function removeText(startRow, startCol, endRow, endCol, data) {
-    const delta = {
-      action: "removeText",
-      range: makeRange(startRow, startCol, endRow, endCol)
-    }
-    editor.session.doc.applyDeltas([delta])
-  }
-
-  function removeLines(startRow, startCol, endRow, endCol, data) {
-    const delta = {
-      action: "removeLines",
-      range: makeRange(startRow, startCol, endRow, endCol)
-    }
+  function remove(startRow, startCol, endRow, endCol, data) {
+    const delta = Object.assign({
+                      action: "remove"
+                    }, makeRange(startRow, startCol, endRow, endCol)
+                  )
     editor.session.doc.applyDeltas([delta])
   }
 
@@ -72,7 +57,7 @@ const Autobot = (editor) => {
     }
   }
 
-  handlers = {select, insertText, insertLines, removeText, removeLines}
+  handlers = {select, insert, remove}
 
   // Commands are stored in the format:
   // [time, name, arguments...]

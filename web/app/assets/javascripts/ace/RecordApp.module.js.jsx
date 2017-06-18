@@ -11,7 +11,7 @@ const Videos = VideosDB()
 const App = React.createClass({
   getInitialState() {
     return ({
-      videoId: parseInt(window.location.hash.substring(1)),
+      videoId: window.location.hash.substring(1),
       commands: [],
       videos: Videos.list(),
       recordingId: undefined

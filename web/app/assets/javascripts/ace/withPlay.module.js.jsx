@@ -85,7 +85,7 @@ const Play = (Component) => {
     setStart() {
       this.clearTicker()
       this.resetState()
-      editor.setValue()
+      editor.setValue("")
       autobot.setCursor({row: 0, column: 0})
     },
 
@@ -127,7 +127,7 @@ const Play = (Component) => {
     seekTo(time) {
       this.pause(time)
       this.updateTimePosition(time)
-      editor.setValue()
+      editor.setValue("")
 
       const chunkPosition = (
         this.props.chunksUpTo(time, (chunk) => {

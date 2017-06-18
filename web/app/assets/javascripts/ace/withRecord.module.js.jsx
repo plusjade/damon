@@ -77,13 +77,13 @@ const withRecord = (Component) => {
     },
 
     listenChange(e) {
-      const start = e.data.range.start
-      const end = e.data.range.end
+      const start = e.start
+      const end = e.end
 
-      if (e.data.action.indexOf("insert") === 0) {
-        const insert = e.data.lines || e.data.text
+      if (e.action.indexOf("insert") === 0) {
+        const insert = e.lines || e.text
         this.log(
-          e.data.action,
+          e.action,
           start.row,
           start.column,
           end.row,
@@ -92,7 +92,7 @@ const withRecord = (Component) => {
         )
       } else {
         this.log(
-          e.data.action,
+          e.action,
           start.row,
           start.column,
           end.row,
@@ -129,8 +129,9 @@ const withRecord = (Component) => {
     // together during playback and not allow paints of intermediate states.
     // Specifically this applies to replace (which is a remove and an insert back to back)
     log() {
-      console.log("log")
       if (this.isPaused()) { return }
+
+      console.log("log")
 
       if (synchronizedTime === undefined) {
         synchronizedTime = Math.floor(this.getTimePosition())
