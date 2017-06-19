@@ -1,4 +1,5 @@
 import Commands             from 'ace/lib/Commands'
+import throttle             from 'ace/lib/throttle'
 import VideosDB             from 'ace/lib/VideosDB'
 import QueryParams          from 'ace/lib/QueryParams'
 
@@ -27,6 +28,7 @@ const App = React.createClass({
   },
 
   componentWillMount() {
+    this.previewThrottled = throttle(this.preview, 100)
     if (this.state.videoId) {
       const commands = Video.find(this.state.videoId)
       if (commands) {
@@ -61,6 +63,10 @@ const App = React.createClass({
     this.editorNode = node
   },
 
+  previewerRef(node) {
+    this.previewerNode = node
+  },
+
   getEditor() {
     if (this.editor) { return this.editor }
     if (!this.editorNode) { return }
@@ -68,8 +74,42 @@ const App = React.createClass({
     this.editor.setTheme("ace/theme/twilight")
     this.editor.getSession().setMode("ace/mode/javascript")
     this.editor.getSession().setUseSoftTabs(true)
+    this.editor.session.doc.on("change", this.previewThrottled, true)
 
     return this.editor
+  },
+
+  previewData() {
+    const code = this.getEditor().getValue()
+    return ({
+      "code": code,
+      "cursor": {
+        "start": 0,
+        "end": 0
+      },
+      "validate": "",
+      "noLint": false,
+      "version": 4,
+      "settings": {},
+      "workersDir": "http://localhost:8000/build/workers/",
+      "externalsDir": "http://localhost:8000/build/external/",
+      "imagesDir": "http://localhost:8000/build/images/",
+      "soundsDir": "../../sounds/",
+      "jshintFile": "http://localhost:8000/build/external/jshint/jshint.js",
+      "outputType": "",
+      "enableLoopProtect": true
+    })
+  },
+
+  preview() {
+    console.log("preview")
+    if (this.previewerNode) {
+      const data = JSON.stringify(this.previewData())
+      this
+        .previewerNode
+        .contentWindow
+        .postMessage(data, "http://localhost:8000/demos/simple/output.html")
+    }
   },
 
   render() {
@@ -101,7 +141,7 @@ const App = React.createClass({
               boxSizing: "border-box",
             }}
           >
-            <Previewer />
+            <Previewer previewerRef={this.previewerRef} />
           </div><div style={{
               height: "400px",
               width: "20%",
