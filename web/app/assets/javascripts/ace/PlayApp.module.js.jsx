@@ -6,6 +6,7 @@ import QueryParams          from 'ace/lib/QueryParams'
 import withPlay             from 'ace/withPlay'
 
 import AceEditor            from 'ace/components/AceEditor'
+import NewRecording         from 'ace/components/NewRecording'
 import Player               from 'ace/components/Player'
 import Previewer            from 'ace/components/Previewer'
 import VideosList           from 'ace/components/VideosList'
@@ -148,8 +149,15 @@ const App = React.createClass({
               display: "inline-block",
               verticalAlign: "top",
               boxSizing: "border-box",
+              textAlign: "right",
+              color: "#BDBDBD",
             }}
           >
+            <NewRecording
+              onClick={() => {
+                window.location = "/make"
+              }}
+            />
           {this.state.videos && (
             <VideosList
               list={this.state.videos}

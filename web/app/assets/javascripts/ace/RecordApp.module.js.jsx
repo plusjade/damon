@@ -5,6 +5,7 @@ import QueryParams          from 'ace/lib/QueryParams'
 import withRecord           from 'ace/withRecord'
 
 import AceEditor            from 'ace/components/AceEditor'
+import NewRecording         from 'ace/components/NewRecording'
 import Previewer            from 'ace/components/Previewer'
 import Recorder             from 'ace/components/Recorder'
 import VideosList           from 'ace/components/VideosList'
@@ -127,19 +128,15 @@ const App = React.createClass({
               display: "inline-block",
               verticalAlign: "top",
               boxSizing: "border-box",
+              textAlign: "right",
+              color: "#BDBDBD",
             }}
           >
-            <a
-              href="#"
-              style={{color: "#FFF"}}
-              onClick={(e) => {
-                e.preventDefault()
+            <NewRecording
+              onClick={() => {
                 this.newRecording()
               }}
-            >
-              New recording
-            </a>
-
+            />
           {this.state.videos && (
             <VideosList
               list={this.state.videos}

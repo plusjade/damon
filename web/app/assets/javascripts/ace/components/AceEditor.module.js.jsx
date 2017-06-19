@@ -7,6 +7,7 @@ const AceEditor = (props) => {
       bottom: 0,
       left: 0,
       right: 0,
+      fontSize: "13px",
     }
   }
 

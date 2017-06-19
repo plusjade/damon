@@ -1,11 +1,21 @@
 const VideosList = (props) => {
   return (
-    <ul style={{color: "#BDBDBD", textAlign: "right", listStyle: "none"}}>
+    <ul style={{
+      listStyle: "none",
+      padding: 0,
+      margin: 0,
+    }}>
     {props.list.map((v, i) => {
       return (
         <li key={i}>
           <a
-            style={{color: "inherit"}}
+            style={{
+              color: "inherit",
+              padding: "10px 20px",
+              display: "block",
+              borderBottom: "1px solid #555",
+              textDecoration: "none",
+            }}
             href="#"
             onClick={(e) => {
               e.preventDefault()
