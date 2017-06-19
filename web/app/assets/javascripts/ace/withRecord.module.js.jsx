@@ -58,19 +58,35 @@ const withRecord = (Component) => {
     },
 
     listen() {
-      this.editor.session.doc.on("change", this.listenChange, true)
-      editor
+      this
+        .editor
+        .session
+        .doc
+        .on("change", this.listenChange, true)
+      this
+        .editor
         .selection
         .addEventListener("changeCursor", this.listenChangeCursor, true)
-      editor
+      this
+        .editor
         .selection
         .addEventListener("changeSelection", this.listenSelect, true)
     },
 
     unListen() {
-      this.editor.session.doc.off("change", this.listenChange)
-      this.editor.selection.removeEventListener("changeCursor", this.listenChangeCursor)
-      this.editor.selection.removeEventListener("changeSelection", this.listenSelect)
+      this
+        .editor
+        .session
+        .doc
+        .off("change", this.listenChange)
+      this
+        .editor
+        .selection
+        .removeEventListener("changeCursor", this.listenChangeCursor)
+      this
+        .editor
+        .selection
+        .removeEventListener("changeSelection", this.listenSelect)
     },
 
     listenChange(e) {
@@ -119,16 +135,8 @@ const withRecord = (Component) => {
 
     // Commands are stored in the format:
     // [time, name, arguments...]
-
-    // By only rechecking the time when asynchrynous code executes we guarantee that
-    // all event which occured as part of the same action
-    // (and therefore the same paint) have the same timestamp. Meaning they will be
-    // together during playback and not allow paints of intermediate states.
-    // Specifically this applies to replace (which is a remove and an insert back to back)
     log() {
       if (this.isPaused()) { return }
-
-      console.log("log")
 
       if (synchronizedTime === undefined) {
         synchronizedTime = Math.floor(this.getTimePosition())
