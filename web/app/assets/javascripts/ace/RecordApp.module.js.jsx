@@ -6,7 +6,7 @@ import withRecord           from 'ace/withRecord'
 
 import AceEditor            from 'ace/components/AceEditor'
 import NewRecording         from 'ace/components/NewRecording'
-import Previewer            from 'ace/components/Previewer'
+import Result               from 'ace/components/Result'
 import Recorder             from 'ace/components/Recorder'
 import VideosList           from 'ace/components/VideosList'
 
@@ -121,7 +121,7 @@ const App = React.createClass({
               boxSizing: "border-box",
             }}
           >
-            <Previewer />
+            <Result />
           </div><div style={{
               height: "400px",
               width: "20%",

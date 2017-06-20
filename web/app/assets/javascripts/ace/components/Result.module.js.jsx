@@ -1,4 +1,4 @@
-const Previewer = (props) => {
+const Result = (props) => {
   return (
     <div>
       <iframe
@@ -7,7 +7,7 @@ const Previewer = (props) => {
           height: "496px",
           border: 0,
         }}
-        ref={props.previewerRef}
+        ref={props.resultRef}
         id="output-frame"
         src="//localhost:8000/demos/simple/output.html"
         data-src="//localhost:8000/demos/"
@@ -16,4 +16,4 @@ const Previewer = (props) => {
   )
 }
 
-export default Previewer
+export default Result

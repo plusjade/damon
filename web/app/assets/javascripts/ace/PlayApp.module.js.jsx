@@ -8,7 +8,7 @@ import withPlay             from 'ace/withPlay'
 import AceEditor            from 'ace/components/AceEditor'
 import NewRecording         from 'ace/components/NewRecording'
 import Player               from 'ace/components/Player'
-import Previewer            from 'ace/components/Previewer'
+import Result               from 'ace/components/Result'
 import VideosList           from 'ace/components/VideosList'
 
 const PlayerView = withPlay(Player)
@@ -29,7 +29,7 @@ const App = React.createClass({
   },
 
   componentWillMount() {
-    this.previewThrottled = throttle(this.preview, 100)
+    this.resultThrottled = throttle(this.result, 100)
     if (this.state.videoId) {
       const commands = Video.find(this.state.videoId)
       if (commands) {
@@ -64,8 +64,8 @@ const App = React.createClass({
     this.editorNode = node
   },
 
-  previewerRef(node) {
-    this.previewerNode = node
+  resultRef(node) {
+    this.resultNode = node
   },
 
   getEditor() {
@@ -75,12 +75,12 @@ const App = React.createClass({
     this.editor.setTheme("ace/theme/twilight")
     this.editor.getSession().setMode("ace/mode/javascript")
     this.editor.getSession().setUseSoftTabs(true)
-    this.editor.session.doc.on("change", this.previewThrottled, true)
+    this.editor.session.doc.on("change", this.resultThrottled, true)
 
     return this.editor
   },
 
-  previewData() {
+  resultData() {
     const code = this.getEditor().getValue()
     return ({
       "code": code,
@@ -102,12 +102,12 @@ const App = React.createClass({
     })
   },
 
-  preview() {
-    console.log("preview")
-    if (this.previewerNode) {
-      const data = JSON.stringify(this.previewData())
+  result() {
+    console.log("result")
+    if (this.resultNode) {
+      const data = JSON.stringify(this.resultData())
       this
-        .previewerNode
+        .resultNode
         .contentWindow
         .postMessage(data, "http://localhost:8000/demos/simple/output.html")
     }
@@ -142,7 +142,7 @@ const App = React.createClass({
               boxSizing: "border-box",
             }}
           >
-            <Previewer previewerRef={this.previewerRef} />
+            <Result resultRef={this.resultRef} />
           </div><div style={{
               height: "400px",
               width: "20%",
