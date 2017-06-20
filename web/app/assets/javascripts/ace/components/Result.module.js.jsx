@@ -9,8 +9,7 @@ const Result = (props) => {
         }}
         ref={props.resultRef}
         id="output-frame"
-        src="//localhost:8000/demos/simple/output.html"
-        data-src="//localhost:8000/demos/"
+        src={props.endpoint}
       />
     </div>
   )

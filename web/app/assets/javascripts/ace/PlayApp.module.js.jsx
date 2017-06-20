@@ -21,6 +21,7 @@ const App = React.createClass({
       commands: [],
       videoId: QParams.get("id"),
       videos: Video.list(),
+      mode: "javascript",
     })
   },
 
@@ -73,7 +74,7 @@ const App = React.createClass({
     if (!this.editorNode) { return }
     this.editor = window.editor = ace.edit(this.editorNode)
     this.editor.setTheme("ace/theme/twilight")
-    this.editor.getSession().setMode("ace/mode/javascript")
+    this.editor.getSession().setMode(`ace/mode/${this.state.mode}`)
     this.editor.getSession().setUseSoftTabs(true)
     this.editor.session.doc.on("change", this.resultThrottled, true)
 
@@ -102,6 +103,23 @@ const App = React.createClass({
     })
   },
 
+  resultEndpoint() {
+    switch (this.state.mode) {
+      case "javascript": {
+        return "http://localhost:8000/demos/simple/output.html"
+        break
+      }
+      case "html": {
+        return "http://localhost:8000/demos/simple/output_webpage.html"
+        break
+      }
+      case "sql": {
+        return "http://localhost:8000/demos/simple/output_sql.html"
+        break
+      }
+    }
+  },
+
   result() {
     console.log("result")
     if (this.resultNode) {
@@ -109,7 +127,7 @@ const App = React.createClass({
       this
         .resultNode
         .contentWindow
-        .postMessage(data, "http://localhost:8000/demos/simple/output.html")
+        .postMessage(data, this.resultEndpoint())
     }
   },
 
@@ -142,7 +160,10 @@ const App = React.createClass({
               boxSizing: "border-box",
             }}
           >
-            <Result resultRef={this.resultRef} />
+            <Result
+              endpoint={this.resultEndpoint()}
+              resultRef={this.resultRef}
+            />
           </div><div style={{
               height: "400px",
               width: "20%",
