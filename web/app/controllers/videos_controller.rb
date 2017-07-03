@@ -2,7 +2,7 @@ class VideosController < ActionController::Base
   def index
     videos = Video.all.order("created_at desc")
 
-    data = ActiveModel::SerializableResource.new(
+    data = ActiveModelSerializers::SerializableResource.new(
       videos,
       each_serializer: VideoListSerializer
     )

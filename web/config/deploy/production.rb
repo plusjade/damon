@@ -19,7 +19,7 @@
 
 role :app, %w{45.55.109.154}, my_property: :my_value
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
-# role :db,  %w{deploy@example.com}
+role :db, %w{45.55.109.154}, my_property: :my_value
 
 
 
