@@ -36,7 +36,7 @@ class Store
   end
 
   private def s3
-    @s3 ||= Aws::S3::Client.new
+    @s3 ||= Aws::S3::Client.new(region: 'us-west-2')
   end
 
   private def transcode
