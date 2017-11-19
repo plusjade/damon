@@ -2,32 +2,57 @@ class Entry < ApplicationRecord
 
   before_save :default_occurred
   before_save :add_ordinals
+  before_save :extract_hashtags
 
   scope :ascending, -> { order("occurred_at asc") }
 
+  HASHTAG_REGEX = /#(\w+)/
+
+  def extract_hashtags
+    if (match = self.value.to_s.match(HASHTAG_REGEX))
+      self.category = match[1]
+    end
+  end
+
   def default_occurred
-    if self.occurred_at.blank?
-      if self.ordinal
+    if occurred_at.blank?
+      if ordinal
         self.occurred_at = Ordinal.to_time(self.ordinal)
       else
-        self.occurred_at = Time.now
+        self.occurred_at = Time.now.in_time_zone(Ordinal::PT)
       end
     end
   end
 
   def add_ordinals
-    self.ordinal = Ordinal.from_time(occurred_at)
+    if ordinal.blank?
+      self.ordinal = Ordinal.from_time(occurred_at.in_time_zone(PT))
+    end
   end
 
   def self.last_days
     index = 0
+    today_ordinal = Ordinal.from_time(Time.now)
+    yesterday_ordinal = Ordinal.from_time(1.day.ago)
     entries_by_ordinal(recent_dates_by_ordinal).reduce([]) do |memo, (ordinal, entries)|
-      memo.push({
-        occurred_at: Ordinal.to_date(ordinal),
+      occurred_at = Ordinal.to_date(ordinal)
+      if today_ordinal == ordinal
+        occurred_at = "Today"
+      elsif yesterday_ordinal == ordinal
+        occurred_at = "Yesterday"
+      end
+
+      data = {
+        occurred_at: occurred_at,
         entries: entries,
         ordinal: ordinal,
         index: index,
-      })
+      }
+      if today_ordinal == ordinal
+        data[:isToday] = true
+      end
+
+      memo.push(data)
       index += 1
       memo
     end
@@ -269,6 +294,5 @@ class Entry < ApplicationRecord
       time: "2017 11 6 Monday",
       type: "family",
     },
-
   ]
 end

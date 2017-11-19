@@ -12,8 +12,6 @@ class TrendsController < ActionController::Base
       d
     end
 
-    days.last[:isToday] = true
-
     categories_data = Entry.group(:category).count
 
     categories = categories_data.keys.select(&:present?)
