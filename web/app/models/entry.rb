@@ -62,7 +62,7 @@ class Entry < ApplicationRecord
   RECENT_DAYS = 28
 
   def self.recent_dates_by_ordinal
-    (RECENT_DAYS.days.ago.to_date..Date.today).reduce({}) do |memo, date|
+    (RECENT_DAYS.days.ago.to_date..Date.today).to_a.reverse.reduce({}) do |memo, date|
       memo[Ordinal.from_time(date)] = []
       memo
     end
