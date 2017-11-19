@@ -5,6 +5,7 @@ class Entry < ApplicationRecord
   before_save :extract_hashtags
 
   scope :ascending, -> { order("occurred_at asc") }
+  scope :descending, -> { order("occurred_at desc") }
 
   HASHTAG_REGEX = /#(\w+)/
 
@@ -68,7 +69,7 @@ class Entry < ApplicationRecord
   end
 
   def self.entries_by_ordinal(dates)
-    Entry.ascending.all.reduce(dates) do |memo, entry|
+    Entry.descending.all.reduce(dates) do |memo, entry|
       if memo[entry.ordinal]
         memo[entry.ordinal] << entry
       else
