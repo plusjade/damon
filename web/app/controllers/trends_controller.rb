@@ -24,7 +24,7 @@ class TrendsController < ActionController::Base
       data = Trend.juicify(data)
       data = data.map.with_index do |value, index|
         {
-          date: index,
+          date: index - 27,
           health: value,
         }
       end
