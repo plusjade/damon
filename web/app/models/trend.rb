@@ -1,4 +1,14 @@
 class Trend
+  def self.categories
+    Entry.group(:category).count.reduce([]) do |memo, (category, count)|
+      memo.push({
+        name: category,
+        count: count,
+      })
+      memo
+    end.sort_by{ |a| a[:count] }.reverse
+  end
+
   def self.stats
     juicify(generate_trends.shuffle).map.with_index { |t, i| {date: i, close: t}}
   end
@@ -21,7 +31,7 @@ class Trend
   def self.juicify(data)
     health = 0
     data.map do |bool|
-      if bool.zero?
+      if bool.to_i.zero?
         if health > 0
           health -= 1/7.to_f
           health = 0 if health < 0
