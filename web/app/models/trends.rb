@@ -49,6 +49,7 @@ class Trends
         ordinal: data[index],
         date: index - 28,
         health: value,
+        occurred_at: data[index] == 0 ? nil : Ordinal.to_date(data[index]),
       }
     end
   end

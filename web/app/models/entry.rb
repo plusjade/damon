@@ -45,6 +45,7 @@ class Entry < ApplicationRecord
 
       data = {
         occurred_at: occurred_at,
+        month: Ordinal.to_time(ordinal).strftime("%m").to_i,
         entries: entries,
         ordinal: ordinal,
         index: index,
