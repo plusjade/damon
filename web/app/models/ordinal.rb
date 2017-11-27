@@ -1,7 +1,7 @@
 class Ordinal
   PT = ActiveSupport::TimeZone["Pacific Time (US & Canada)"]
   ORDINAL_FORMAT = "%Y-%j".freeze
-  DATE_FORMAT = "%A %m/%d".freeze
+  DATE_FORMAT = "%a %m/%d".freeze
 
   def self.from_time(time)
     time.in_time_zone(PT).strftime(ORDINAL_FORMAT)

@@ -10,19 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171105204902) do
+ActiveRecord::Schema.define(version: 20171127063913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "categories", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_categories_on_user_id", using: :btree
+  end
+
   create_table "entries", force: :cascade do |t|
     t.integer  "users_id"
     t.text     "value"
-    t.string   "category"
+    t.string   "old_category"
     t.string   "ordinal"
-    t.datetime "occurred_at", null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "occurred_at",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.bigint   "category_id"
     t.index ["occurred_at"], name: "index_entries_on_occurred_at", using: :btree
     t.index ["users_id"], name: "index_entries_on_users_id", using: :btree
   end

@@ -1,9 +1,10 @@
 class EntriesController < ActionController::Base
   def create
+    category = Category.find_by_name!(params[:category])
     entry = Entry.new({
       ordinal: params[:ordinal],
       value: params[:value],
-      category: params[:category],
+      category: category,
     })
 
     entry.save!

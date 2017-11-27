@@ -1,5 +1,6 @@
 class Entry < ApplicationRecord
 
+  belongs_to :category
   before_save :default_occurred
   before_save :add_ordinals
   before_save :extract_hashtags
@@ -70,7 +71,20 @@ class Entry < ApplicationRecord
   end
 
   def self.entries_by_ordinal(dates)
-    Entry.descending.all.reduce(dates) do |memo, entry|
+    entries_dict = _entries_by_ordinal
+
+    dates.reduce({}) do |memo, (ordinal, entries)|
+      if entries_dict[ordinal]
+        memo[ordinal] = entries_dict[ordinal]
+      else
+        memo[ordinal] = []
+      end
+      memo
+    end
+  end
+
+  def self._entries_by_ordinal
+    Entry.descending.all.reduce({}) do |memo, entry|
       if memo[entry.ordinal]
         memo[entry.ordinal] << entry
       else
@@ -79,6 +93,7 @@ class Entry < ApplicationRecord
       memo
     end
   end
+
 
   def self.populate
     ENTRIES.map do |entry|

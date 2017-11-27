@@ -1,3 +1,6 @@
 class EntrySerializer < ActiveModel::Serializer
-  attributes :value, :category, :id
+  attributes :value, :id
+  attribute :category do
+    object.category.name
+  end
 end

@@ -6,6 +6,7 @@
 
 derp.txt
 config/sesames.json
+node_modules/*
 
 # Ignore bundler config.
 /.bundle

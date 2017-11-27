@@ -1,15 +1,22 @@
 class Trends
   def days
-    Entry.last_days.map do |d|
-      d[:entries] = begin
-        ActiveModelSerializers::SerializableResource.new(
-          d[:entries],
-          each_serializer: EntrySerializer
-        ).as_json
-      end
+    @days ||= begin
+      Entry.last_days.map do |d|
+        d[:entries] = d[:entries].map do |entry|
+          {
+            id: entry.id,
+            value: entry.value,
+            category: categories_by_id[entry.category_id].name,
+          }
+        end
 
-      d
+        d
+      end
     end
+  end
+
+  def categories_by_id
+    @categories_by_id ||= Category.all.index_by(&:id)
   end
 
   def categories
@@ -17,11 +24,14 @@ class Trends
   end
 
   def categories_data
-    @categories_data ||= Entry.group(:category).count
+    @categories_data ||= Entry.group(:category).count.reduce({}) do |memo, (cat, count)|
+      memo[cat.name] = count
+      memo
+    end
   end
 
   def trends
-    categories_data.keys.select(&:present?).map do |category|
+    categories_data.keys.map do |category|
       trends_for_category(category)
     end
     .sort_by do |one|
@@ -54,11 +64,30 @@ class Trends
     end
   end
 
+  def maxHealth(category)
+    juice_for_category(category).max_by{ |x| x[:health] }[:health]
+  end
+
+  def days_since_last(category)
+    mark = 28
+    juice_for_category(category).reverse.each.with_index do |day, index|
+      if day[:occurred_at]
+        mark = index
+        break
+      end
+    end
+
+    mark
+  end
+
+
   def trends_for_category(category)
     {
       category: category,
       occurrences: categories_data[category],
-      data: juice_for_category(category)
+      maxHealth: maxHealth(category),
+      days_since_last: days_since_last(category),
+      data: juice_for_category(category),
     }
   end
 end
