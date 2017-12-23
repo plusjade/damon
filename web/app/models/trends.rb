@@ -1,7 +1,9 @@
 class Trends
   def days_with_months
     month = nil
+
     days.map do |d|
+      entries = d[:entries]
       if d[:month] != month
         month = d[:month]
         [
@@ -13,8 +15,9 @@ class Trends
           d
         ]
       else
-        d
-      end
+        [d]
+      end + entries
+
     end.flatten
   end
 
@@ -26,6 +29,7 @@ class Trends
             id: entry.id,
             value: entry.value,
             category: categories_by_id[entry.category_id].name,
+            type: :entry,
           }
         end
 

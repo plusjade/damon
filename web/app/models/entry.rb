@@ -59,19 +59,14 @@ class Entry < ApplicationRecord
     yesterday_ordinal = Ordinal.from_time(1.day.ago)
     entries_by_ordinal(recent_dates_by_ordinal).reduce([]) do |memo, (ordinal, entries)|
       occurred_at = Ordinal.to_date(ordinal)
-      if today_ordinal == ordinal
-        occurred_at = "Today"
-      elsif yesterday_ordinal == ordinal
-        occurred_at = "Yesterday"
-      end
       month = Ordinal.to_time(ordinal).strftime("%m").to_i
       data = {
-        occurred_at: occurred_at,
+        value: occurred_at,
         month: month,
         entries: entries,
         ordinal: ordinal,
-        index: index,
-        color: MONTH_COLORS[month]
+        color: MONTH_COLORS[month],
+        type: :day
       }
       if today_ordinal == ordinal
         data[:isToday] = true

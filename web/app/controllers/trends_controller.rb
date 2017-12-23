@@ -3,8 +3,8 @@ class TrendsController < ActionController::Base
     t = Trends.new
 
     render json: {
+      feed: t.days_with_months.map {|a| b = a.dup; b.delete(:entries) ; b },
       trends: t.trends,
-      days: t.days_with_months,
       categories: t.categories
     }
   end
