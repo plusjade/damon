@@ -1,18 +1,39 @@
 class Entry < ApplicationRecord
 
   belongs_to :category
+  before_validation :extract_hashtags
   before_save :default_occurred
   before_save :add_ordinals
-  before_save :extract_hashtags
+
 
   scope :ascending, -> { order("occurred_at asc") }
   scope :descending, -> { order("occurred_at desc") }
 
+  RECENT_DAYS = 56
   HASHTAG_REGEX = /#(\w+)/
+# http://clrs.cc/
+  MONTH_COLORS = %w(
+    #001f3f
+    #0074D9
+    #7FDBFF
+    #39CCCC
+    #3D9970
+    #2ECC40
+    #01FF70
+    #FFDC00
+    #FF851B
+    #FF4136
+    #85144b
+    #F012BE
+    #B10DC9
+    #111111
+    #AAAAAA
+    #DDDDDD
+  )
 
   def extract_hashtags
     if (match = self.value.to_s.match(HASHTAG_REGEX))
-      self.category = match[1]
+      self.category = Category.find_by_name(match[1])
     end
   end
 
@@ -43,13 +64,14 @@ class Entry < ApplicationRecord
       elsif yesterday_ordinal == ordinal
         occurred_at = "Yesterday"
       end
-
+      month = Ordinal.to_time(ordinal).strftime("%m").to_i
       data = {
         occurred_at: occurred_at,
-        month: Ordinal.to_time(ordinal).strftime("%m").to_i,
+        month: month,
         entries: entries,
         ordinal: ordinal,
         index: index,
+        color: MONTH_COLORS[month]
       }
       if today_ordinal == ordinal
         data[:isToday] = true
@@ -60,8 +82,6 @@ class Entry < ApplicationRecord
       memo
     end
   end
-
-  RECENT_DAYS = 28
 
   def self.recent_dates_by_ordinal
     (RECENT_DAYS.days.ago.to_date..Date.today).to_a.reverse.reduce({}) do |memo, date|

@@ -4,7 +4,7 @@ class TrendsController < ActionController::Base
 
     render json: {
       trends: t.trends,
-      days: t.days,
+      days: t.days_with_months,
       categories: t.categories
     }
   end

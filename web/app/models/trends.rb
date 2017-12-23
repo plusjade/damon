@@ -1,4 +1,23 @@
 class Trends
+  def days_with_months
+    month = nil
+    days.map do |d|
+      if d[:month] != month
+        month = d[:month]
+        [
+          {
+            type: "banner",
+            value: Date::MONTHNAMES[month],
+            color: Entry::MONTH_COLORS[month],
+          },
+          d
+        ]
+      else
+        d
+      end
+    end.flatten
+  end
+
   def days
     @days ||= begin
       Entry.last_days.map do |d|
@@ -57,7 +76,7 @@ class Trends
     Trend.juicify(data).map.with_index do |value, index|
       {
         ordinal: data[index],
-        date: index - 28,
+        date: index - Entry::RECENT_DAYS,
         health: value,
         occurred_at: data[index] == 0 ? nil : Ordinal.to_date(data[index]),
       }
@@ -69,7 +88,7 @@ class Trends
   end
 
   def days_since_last(category)
-    mark = 28
+    mark = Entry::RECENT_DAYS
     juice_for_category(category).reverse.each.with_index do |day, index|
       if day[:occurred_at]
         mark = index
