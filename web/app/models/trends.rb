@@ -2,7 +2,7 @@ class Trends
   def days_with_months
     month = nil
 
-    days.map do |d|
+    days.reverse.map do |d|
       entries = d[:entries]
       if d[:month] != month
         month = d[:month]
