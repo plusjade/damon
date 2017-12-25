@@ -25,10 +25,11 @@ class Trends
     @days ||= begin
       Entry.last_days.map do |d|
         d[:entries] = d[:entries].map do |entry|
+          category = categories_by_id[entry.category_id].name
           {
             id: entry.id,
-            value: entry.value,
-            category: categories_by_id[entry.category_id].name,
+            value: entry.value.presence || "automatic ##{category}",
+            category: category,
             type: :entry,
           }
         end
