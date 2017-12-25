@@ -30,6 +30,8 @@ class Trends
             id: entry.id,
             value: entry.value.presence || "automatic ##{category}",
             category: category,
+            day: Ordinal.to_date(entry.ordinal),
+            color: Entry::MONTH_COLORS[d[:month]],
             type: :entry,
           }
         end
