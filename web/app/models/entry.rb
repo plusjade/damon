@@ -66,6 +66,15 @@ class Entry < ApplicationRecord
         entries: entries,
         ordinal: ordinal,
         color: MONTH_COLORS[month],
+        categories: entries.reduce({}) do |memo, a|
+          if memo[a.category.name]
+            memo[a.category.name] += 1
+          else
+            memo[a.category.name] = 1
+          end
+
+          memo
+        end,
         type: :day
       }
       if today_ordinal == ordinal
