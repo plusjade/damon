@@ -119,7 +119,7 @@ class Trends
       elsif entries >= 5
         emoji = "🔥🔥"
       else
-        emoji = "🌱 🙌"
+        emoji = "🌱🌱"
       end
     elsif days_since_last <= 7
       if entries >= 10
