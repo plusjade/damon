@@ -1,4 +1,5 @@
 class Trends
+  include ActionView::Helpers::DateHelper
   def days_with_months
     month = nil
 
@@ -108,11 +109,19 @@ class Trends
 
 
   def trends_for_category(category)
+    entries = categories_data[category]
+    days_since_last = days_since_last(category)
+    active = if days_since_last.zero?
+                "today"
+              else
+                "#{time_ago_in_words(days_since_last.days.ago)} ago"
+              end
     {
-      category: category,
-      occurrences: categories_data[category],
+      name: category,
+      summary: "active #{active} — #{entries} total",
+      entries: entries,
       maxHealth: maxHealth(category),
-      days_since_last: days_since_last(category),
+      days_since_last: days_since_last,
       data: juice_for_category(category),
     }
   end

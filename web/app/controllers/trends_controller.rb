@@ -7,8 +7,7 @@ class TrendsController < ActionController::Base
         ordinal: Ordinal.from_time(Time.now)
       },
       feed: t.days_with_months.map {|a| b = a.dup; b.delete(:entries) ; b },
-      trends: t.trends,
-      categories: t.categories
+      categories: t.trends,
     }
   end
 end
