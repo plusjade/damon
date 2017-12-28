@@ -111,6 +111,30 @@ class Trends
   def trends_for_category(category)
     entries = categories_data[category]
     days_since_last = days_since_last(category)
+    emoji = nil
+
+    if days_since_last <= 3
+      if entries >= 10
+        emoji = "🔥🔥🚀"
+      elsif entries >= 5
+        emoji = "🔥🔥"
+      else
+        emoji = "🌱 🙌"
+      end
+    elsif days_since_last <= 7
+      if entries >= 10
+        emoji = "🔥🔥"
+      elsif entries >= 5
+        emoji = "🔥"
+      else
+        emoji = "🌱"
+      end
+    elsif days_since_last <= 14
+      emoji = "🤒"
+    else
+      emoji = "😴"
+    end
+
     active = if days_since_last.zero?
                 "today"
               else
@@ -119,6 +143,7 @@ class Trends
     {
       name: category,
       summary: "active #{active} — #{entries} total",
+      emoji: emoji,
       entries: entries,
       maxHealth: maxHealth(category),
       days_since_last: days_since_last,
