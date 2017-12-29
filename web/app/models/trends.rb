@@ -5,18 +5,23 @@ class Trends
 
     days.reverse.map do |d|
       entries = d[:entries]
+
       if d[:month] != month
+
         month = d[:month]
         [
           {
             type: "banner",
-            value: Date::MONTHNAMES[month],
+            value: "7 days ago",
             color: Entry::MONTH_COLORS[month],
           },
           d
         ]
+
       else
+
         [d]
+
       end + entries
 
     end.flatten
@@ -29,9 +34,11 @@ class Trends
           category = categories_by_id[entry.category_id].name
           {
             id: entry.id,
+            timestamp: entry.occurred_at.to_i,
             value: entry.value.presence || "automatic ##{category}",
             category: category,
             day: Ordinal.to_date(entry.ordinal),
+            age: (Time.now.to_date - entry.occurred_at.to_date).to_i,
             color: Entry::MONTH_COLORS[d[:month]],
             type: :entry,
           }

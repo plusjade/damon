@@ -60,7 +60,7 @@ class Entry < ApplicationRecord
     entries_by_ordinal(recent_dates_by_ordinal).reduce([]) do |memo, (ordinal, entries)|
       occurred_at = Ordinal.to_date(ordinal)
       month = Ordinal.to_time(ordinal).strftime("%m").to_i
-      data = {
+      day = {
         value: occurred_at,
         month: month,
         entries: entries,
@@ -77,11 +77,8 @@ class Entry < ApplicationRecord
         end,
         type: :day
       }
-      if today_ordinal == ordinal
-        data[:isToday] = true
-      end
 
-      memo.push(data)
+      memo << day
       index += 1
       memo
     end
