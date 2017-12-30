@@ -1,7 +1,8 @@
 class EntriesController < ActionController::Base
   def create
+    ordinal = params[:ordinal].presence || Ordinal.from_time(Time.now)
     entry = Entry.new({
-      ordinal: params[:ordinal],
+      ordinal: ordinal,
       value: params[:value],
     })
 
