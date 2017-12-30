@@ -17,9 +17,7 @@ class EntrySerializer < ActiveModel::Serializer
     Ordinal.to_date(object.ordinal)
   end
 
-  attribute :days_ago do
-    (Time.now.to_date - object.occurred_at.to_date).to_i
-  end
+  attribute :days_ago
 
   attribute :color do
     month = Ordinal.to_time(object.ordinal).strftime("%m").to_i

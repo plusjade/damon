@@ -31,6 +31,10 @@ class Entry < ApplicationRecord
     #DDDDDD
   )
 
+  def days_ago
+    (Time.now.to_date - occurred_at.to_date).to_i
+  end
+
   def extract_hashtags
     if (match = self.value.to_s.match(HASHTAG_REGEX))
       self.category = Category.find_or_create_by!(name: match[1])
