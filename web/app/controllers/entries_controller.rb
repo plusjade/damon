@@ -8,7 +8,10 @@ class EntriesController < ActionController::Base
 
     entry.save!
 
-    render json: {entry: entry}
+    render json: {
+      entry: EntrySerializer.new(entry),
+      category: entry.category.name
+    }
   end
 
   def destroy
