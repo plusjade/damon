@@ -2,8 +2,14 @@ class CategoryList
   include ActionView::Helpers::DateHelper
 
   def payload
-    category_totals_by_name.keys.sort.map do |category|
+    category_totals_by_name.keys.map do |category|
       data_for_category(category)
+    end.sort do |a, b|
+      if a[:emoji_id] == b[:emoji_id]
+        a[:name] <=> b[:name]
+      else
+        a[:emoji_id] <=> b[:emoji_id]
+      end
     end
   end
 
@@ -13,6 +19,16 @@ class CategoryList
     entry ? entry.days_ago : nil
   end
 
+  EMOJIS = {
+    1 => "🔥🔥🚀",
+    2 => "🔥🔥",
+    3 => "🔥",
+    4 => "🌱🌱",
+    5 => "🌱",
+    6 => "🤒",
+    7 => "😴",
+  }
+
   def data_for_category(category)
     total_entries = category_totals_by_name[category]
     days_since_last = days_since_last(category)
@@ -20,24 +36,24 @@ class CategoryList
 
     if days_since_last <= 3
       if total_entries >= 10
-        emoji = "🔥🔥🚀"
+        emoji = 1
       elsif total_entries >= 5
-        emoji = "🔥🔥"
+        emoji = 2
       else
-        emoji = "🌱🌱"
+        emoji = 4
       end
     elsif days_since_last <= 7
       if total_entries >= 10
-        emoji = "🔥🔥"
+        emoji = 2
       elsif total_entries >= 5
-        emoji = "🔥"
+        emoji = 3
       else
-        emoji = "🌱"
+        emoji = 5
       end
     elsif days_since_last <= 14
-      emoji = "🤒"
+      emoji = 6
     else
-      emoji = "😴"
+      emoji = 7
     end
 
     active = if days_since_last.zero?
@@ -48,7 +64,8 @@ class CategoryList
     {
       name: category,
       summary: "active #{active} — #{total_entries} total",
-      emoji: emoji,
+      emoji_id: emoji,
+      emoji: EMOJIS[emoji],
     }
   end
 
