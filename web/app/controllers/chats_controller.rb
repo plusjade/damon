@@ -31,7 +31,7 @@ class ChatsController < ActionController::Base
         id: 2,
         type: "botEntry",
         value: "I'm positive buddy 🤪",
-        timestamp: Time.now + 10.seconds.to_i,
+        timestamp: (Time.now + 10.seconds).to_i,
         type: "theirs",
       },
       {
