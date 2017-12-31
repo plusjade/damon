@@ -4,13 +4,13 @@ class ChatsController < ActionController::Base
       chatsIndex: [],
       chatsObjects: home.reduce({}) { |memo, a| memo[a[:id]] = a ; memo },
       chatsCommands: [
-        {id: 1, duration: 1000, delay: 300},
-        {id: 2, duration: 800, delay: 2000},
-        {id: 3, duration: 800, delay: 1000},
-        {id: 4, duration: 800, delay: 800},
-        {id: 5, duration: 800, delay: 800},
+        {id: 1, duration: 2000, delay: 300},
+        {id: 2, duration: 1600, delay: 1000},
+        {id: 3, duration: 1000, delay: 1000},
+        {id: 4, duration: 800, delay: 1000},
+        {id: 5, duration: 1000, delay: 1000},
         {id: 6, duration: 800, delay: 1000},
-        {id: 7, duration: 800, delay: 1000},
+        {id: 7, duration: 1000, delay: 1000},
         {id: 8, duration: 1500, delay: 1000},
         {id: 9, duration: 1500, delay: 2000},
       ]
@@ -30,8 +30,7 @@ class ChatsController < ActionController::Base
       {
         id: 2,
         type: "botEntry",
-        value: "I'm positive buddy 🤪" \
-               "",
+        value: "I'm positive buddy 🤪",
         timestamp: Time.now + 10.seconds.to_i,
         type: "theirs",
       },
