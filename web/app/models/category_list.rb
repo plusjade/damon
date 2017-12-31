@@ -66,6 +66,7 @@ class CategoryList
       summary: "active #{active} — #{total_entries} total",
       emoji_id: emoji,
       emoji: EMOJIS[emoji],
+      daysAgo: days_since_last,
     }
   end
 
