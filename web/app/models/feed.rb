@@ -1,9 +1,10 @@
 class Feed
   include ActionView::Helpers::DateHelper
 
-  attr_reader :category_name
+  attr_reader :user_id, :category_name
 
-  def initialize(category_name:)
+  def initialize(user_id:, category_name:)
+    @user_id = user_id
     @category_name = category_name
   end
 
@@ -53,10 +54,10 @@ class Feed
   end
 
   def category
-    @category ||= Category.find_by_name!(category_name)
+    @category ||= Category.where(user_id: user_id).find_by_name!(category_name)
   end
 
   def entries
-    Entry.ascending.where(category: category)
+    Entry.ascending.where(user_id: user_id, category: category)
   end
 end

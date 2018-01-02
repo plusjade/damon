@@ -1,5 +1,6 @@
 class ChatsController < ActionController::Base
   def index
+    user = User.find(params[:user_id])
     render json: {
       chatsIndex: [],
       chatsObjects: home.reduce({}) { |memo, a| memo[a[:id]] = a ; memo },

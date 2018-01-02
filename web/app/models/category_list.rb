@@ -1,6 +1,12 @@
 class CategoryList
   include ActionView::Helpers::DateHelper
 
+  attr_reader :user_id
+
+  def initialize(user_id:)
+    @user_id = user_id
+  end
+
   def payload
     category_totals_by_name.keys.map do |category|
       data_for_category(category)
@@ -15,7 +21,7 @@ class CategoryList
 
   def days_since_last(category)
     category_id = category_ids_by_name[category]
-    entry = Entry.descending.where(category_id: category_id).first
+    entry = Entry.descending.where(user_id: user_id, category_id: category_id).first
     entry ? entry.days_ago : nil
   end
 
@@ -72,7 +78,7 @@ class CategoryList
 
   def category_totals_by_name
     @category_totals_by_name ||= begin
-      Entry.group(:category).count.reduce({}) do |memo, (cat, count)|
+      Entry.where(user_id: user_id).group(:category).count.reduce({}) do |memo, (cat, count)|
         memo[cat.name] = count
         memo
       end
@@ -81,7 +87,7 @@ class CategoryList
 
   def category_ids_by_name
     @category_ids_by_name ||= begin
-      Category.all.select(:id, :name).reduce({}) do |memo, cat|
+      Category.where(user_id: user_id).all.select(:id, :name).reduce({}) do |memo, cat|
         memo[cat.name] = cat.id
         memo
       end
