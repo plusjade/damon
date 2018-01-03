@@ -22,7 +22,7 @@ class CategoryList
   def days_since_last(category)
     category_id = category_ids_by_name[category]
     entry = Entry.descending.where(user_id: user_id, category_id: category_id).first
-    entry ? entry.days_ago : nil
+    entry ? entry.days_ago : 0
   end
 
   EMOJIS = {
@@ -77,8 +77,10 @@ class CategoryList
   end
 
   def category_totals_by_name
+    all_categories = category_ids_by_name.reduce({}) { |memo, (name, _)| memo[name] = 0; memo }
+
     @category_totals_by_name ||= begin
-      Entry.where(user_id: user_id).group(:category).count.reduce({}) do |memo, (cat, count)|
+      Entry.where(user_id: user_id).group(:category).count.reduce(all_categories) do |memo, (cat, count)|
         memo[cat.name] = count
         memo
       end

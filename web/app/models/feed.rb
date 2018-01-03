@@ -13,7 +13,7 @@ class Feed
       EntrySerializer.new(entry).as_json.merge({category: category.name})
     end
 
-    max = result.first[:days_ago] + 1
+    max = result.first ? result.first[:days_ago] + 1 : 0
     steps = [max, 60, 45, 28, 14, 7, 1, 0]
     steps = steps.select { |step| step <= max }
 
