@@ -44,6 +44,7 @@ class Feed
       value = "Yesterday" if step == 1
       value = "Today" if step == 0
       memo << {
+        id: Digest::MD5.hexdigest(value),
         type: "banner",
         value: value,
         color: "#333",
