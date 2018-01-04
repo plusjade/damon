@@ -32,7 +32,7 @@ class Entry < ApplicationRecord
   )
 
   def days_ago
-    (Time.now.to_date - occurred_at.to_date).to_i
+    (Time.now.in_time_zone(PT).to_date - a.occurred_at.in_time_zone(PT).to_date).to_i
   end
 
   def extract_hashtags
@@ -59,8 +59,6 @@ class Entry < ApplicationRecord
 
   def self.last_days
     index = 0
-    today_ordinal = Ordinal.from_time(Time.now)
-    yesterday_ordinal = Ordinal.from_time(1.day.ago)
     entries_by_ordinal(recent_dates_by_ordinal).reduce([]) do |memo, (ordinal, entries)|
       occurred_at = Ordinal.to_date(ordinal)
       month = Ordinal.to_time(ordinal).strftime("%m").to_i
