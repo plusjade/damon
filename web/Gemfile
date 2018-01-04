@@ -26,6 +26,7 @@ gem "pg"
 gem 'rack-cors'
 gem 'aws-sdk', '~> 2'
 gem 'active_model_serializers', '~> 0'
+gem 'rollbar'
 
 gem 'haml-rails'
 gem 'bourbon'
