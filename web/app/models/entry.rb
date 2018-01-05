@@ -36,6 +36,8 @@ class Entry < ApplicationRecord
   end
 
   def extract_hashtags
+    return if self.category
+
     if (match = self.value.to_s.match(HASHTAG_REGEX))
       self.category = Category.find_or_create_by!(name: match[1], user_id: user_id)
     end
