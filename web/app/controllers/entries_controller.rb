@@ -2,6 +2,9 @@ class EntriesController < ActionController::Base
   def create
     user = User.find(params[:user_id])
     ordinal = params[:ordinal].presence || Ordinal.from_time(Time.now)
+    if ordinal == "yesterday"
+      ordinal = Ordinal.from_time(1.day.ago)
+    end
 
     category = nil
     if (category_name = params[:category].to_s.strip.presence)
