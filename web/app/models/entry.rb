@@ -2,7 +2,7 @@ class Entry < ApplicationRecord
 
   belongs_to :category
   belongs_to :user
-  before_validation :extract_hashtags
+  # before_validation :extract_hashtags
   before_save :default_occurred
   before_save :add_ordinals
 

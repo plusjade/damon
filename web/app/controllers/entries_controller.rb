@@ -11,6 +11,8 @@ class EntriesController < ActionController::Base
       category = Category.find_or_create_by!(name: category_name.downcase, user: user)
     end
 
+    raise ActiveRecord::RecordNotFound unless category
+
     entry = Entry.new({
       user_id: user.id,
       category: category,
