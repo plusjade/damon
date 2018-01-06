@@ -25,6 +25,12 @@ class CategoryList
     entry ? entry.days_ago : 0
   end
 
+  def days_since_first(category)
+    category_id = category_ids_by_name[category]
+    entry = Entry.ascending.where(user_id: user_id, category_id: category_id).first
+    entry ? entry.days_ago : 0
+  end
+
   EMOJIS = {
     1 => "🔥🔥🚀",
     2 => "🔥🔥",
@@ -37,6 +43,7 @@ class CategoryList
 
   def data_for_category(category)
     total_entries = category_totals_by_name[category]
+    total_entries_last_7 = category_totals_by_name_last_7[category]
     days_since_last = days_since_last(category)
     emoji = nil
 
@@ -67,20 +74,39 @@ class CategoryList
               else
                 "#{time_ago_in_words(days_since_last.days.ago)} ago"
               end
+
+    first_entry_in_words = time_ago_in_words(days_since_first(category).days.ago)
+
     {
       name: category,
-      summary: "active #{active} — #{total_entries} total",
+      summary: "active #{active}",
+      total: total_entries,
       emoji_id: emoji,
       emoji: EMOJIS[emoji],
       daysAgo: days_since_last,
+      summaries: [
+        "Your last entry was #{active}",
+        ("You've created #{total_entries_last_7} entries in the last 7 days" unless total_entries_last_7.zero?),
+        "You've created #{total_entries} total entries over the past #{first_entry_in_words}"
+      ].compact
     }
   end
 
   def category_totals_by_name
-    all_categories = category_ids_by_name.reduce({}) { |memo, (name, _)| memo[name] = 0; memo }
-
     @category_totals_by_name ||= begin
+      all_categories = category_ids_by_name.reduce({}) { |memo, (name, _)| memo[name] = 0; memo }
       Entry.where(user_id: user_id).group(:category).count.reduce(all_categories) do |memo, (cat, count)|
+        memo[cat.name] = count
+        memo
+      end
+    end
+  end
+
+  def category_totals_by_name_last_7
+    @category_totals_by_name_last_7 ||= begin
+      all_categories = category_ids_by_name.reduce({}) { |memo, (name, _)| memo[name] = 0; memo }
+      age_ago = Date.today.in_time_zone(PT) - 7.days
+      Entry.where(user_id: user_id).where("occurred_at >= ?", age_ago).group(:category).count.reduce(all_categories) do |memo, (cat, count)|
         memo[cat.name] = count
         memo
       end

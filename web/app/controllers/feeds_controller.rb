@@ -8,8 +8,8 @@ class FeedsController < ActionController::Base
       chatsIndex: feed.map{ |a| a[:id] } ,
       chatsObjects: (feed + chats).reduce({}) { |memo, a| memo[a[:id]] = a ; memo },
       chatsCommands: [
-        {id: chats.first[:id], duration: 2000, delay: 300},
-        {id: chats[1][:id], duration: 1600, delay: 1000},
+        # {id: chats.first[:id], duration: 2000, delay: 300},
+        # {id: chats[1][:id], duration: 1600, delay: 1000},
         # {id: 3, duration: 1000, delay: 1000},
         # {id: 4, duration: 800, delay: 1000},
         # {id: 5, duration: 1000, delay: 1000},

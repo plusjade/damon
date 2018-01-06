@@ -3,8 +3,11 @@ class CategoriesController < ActionController::Base
     user = User.find(params[:user_id])
     category_list = CategoryList.new(user_id: user.id)
 
+    categories_objects = category_list.payload.reduce({}) { |m, c| m[c[:name]] = c; m }
+
     render json: {
-      categories: category_list.payload,
+      categoriesIndex: categories_objects.keys,
+      categoriesObjects: categories_objects,
     }
   end
 end
