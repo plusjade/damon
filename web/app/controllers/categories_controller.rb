@@ -8,6 +8,6 @@ class CategoriesController < ActionController::Base
     render json: {
       categoriesIndex: categories_objects.keys,
       categoriesObjects: categories_objects,
-    }
+    }.merge(Category::PROMPTS)
   end
 end
