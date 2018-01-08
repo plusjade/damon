@@ -7,8 +7,8 @@ class Category < ApplicationRecord
       "where",
       "what",
       "feels",
-      # "freeform",
       "when",
+      "freeform",
     ],
     promptsObjects: {
       where: {
@@ -17,6 +17,7 @@ class Category < ApplicationRecord
         prompt: "Where did you get physical?",
         customPrompt: "Somewhere else...",
         choices: [
+          "|custom|",
           "Trail",
           "Home",
           "Gym",
@@ -31,8 +32,9 @@ class Category < ApplicationRecord
         prompt: "What did you do?",
         customPrompt: "Something else...",
         choices: [
+          "|custom|",
           "I biked",
-          "I did Yogo",
+          "I did Yoga",
           "I ran",
           "I lifted Weights",
           "Cardio",
@@ -45,6 +47,7 @@ class Category < ApplicationRecord
         prompt: "How did you feel?",
         customPrompt: "Something else...",
         choices: [
+          "|custom|",
           "😀",
           "😅",
           "😐",
@@ -68,7 +71,10 @@ class Category < ApplicationRecord
         type: "prompt",
         prompt: "Anything else?",
         customPrompt: "Something you'd like to remember...",
-        showSkip: true,
+        choices: [
+          "|custom|",
+          "|pass|",
+        ]
       },
     }
   }
