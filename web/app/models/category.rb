@@ -1,6 +1,21 @@
 class Category < ApplicationRecord
   has_many :entries
+  has_many :prompts
   belongs_to :user
+
+  def self.populate(category_id)
+    category = Category.find(category_id)
+    Category::PROMPTS[:promptsObjects].values.map.with_index do |a, i|
+      Prompt.new({
+        key: a[:id],
+        prompt: a[:prompt],
+        custom_prompt: a[:customPrompt],
+        choices: a[:choices],
+        position: i,
+        category_id: category.id,
+      })
+    end
+  end
 
   PROMPTS = {
     promptsIndex: [
@@ -8,41 +23,39 @@ class Category < ApplicationRecord
       "what",
       "feels",
       "when",
-      "freeform",
+      "custom",
     ],
     promptsObjects: {
       where: {
-        tag: "where",
+        id: "where",
         type: "prompt",
-        prompt: "Where did you get physical?",
+        prompt: "Where did you exercise?",
         customPrompt: "Somewhere else...",
         choices: [
           "|custom|",
-          "Trail",
-          "Home",
-          "Gym",
-          "Outside",
-          "Forest",
-          "Friends",
+          "trail",
+          "home",
+          "gym",
+          "outside",
         ],
       },
       what: {
-        tag: "what",
+        id: "what",
         type: "prompt",
         prompt: "What did you do?",
         customPrompt: "Something else...",
         choices: [
           "|custom|",
-          "I biked",
-          "I did Yoga",
-          "I ran",
-          "I lifted Weights",
-          "Cardio",
-          "I swam",
+          "bike",
+          "yoga",
+          "run",
+          "weights",
+          "cardio",
+          "walk",
         ],
       },
       feels: {
-        tag: "feels",
+        id: "feels",
         type: "prompt",
         prompt: "How did you feel?",
         customPrompt: "Something else...",
@@ -57,7 +70,7 @@ class Category < ApplicationRecord
         ],
       },
       when: {
-        tag: "when",
+        id: "when",
         type: "prompt",
         prompt: "When was this?",
         customPrompt: "Enter a custom date",
@@ -66,8 +79,8 @@ class Category < ApplicationRecord
           "Today",
         ]
       },
-      freeform: {
-        tag: "freeform",
+      custom: {
+        id: "custom",
         type: "prompt",
         prompt: "Anything else?",
         customPrompt: "Something you'd like to remember...",

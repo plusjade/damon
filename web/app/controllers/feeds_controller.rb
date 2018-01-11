@@ -1,6 +1,9 @@
 class FeedsController < ActionController::Base
   def show
     user = User.find(params[:user_id])
+    category = Category.where(user_id: user.id, name: params[:category_name]).first
+    raise ActiveRecord::RecordNotFound unless category
+
     f = Feed.new(user_id: user.id, category_name: params[:category_name])
     feed = f.feed
     chats = begin
@@ -13,10 +16,18 @@ class FeedsController < ActionController::Base
         }
       end
     end
+    # chats = []
+
+    prompts = category.prompts.sorted.to_a
+    promptsObjects = prompts.reduce({}) { |memo, a| memo[a[:key]] = PromptSerializer.new(a); memo}
+
+    chatsObjects = (feed + chats).reduce({}) { |memo, a| memo[a[:id]] = a ; memo }
+    chatsObjects = chatsObjects.merge(promptsObjects)
 
     render json: {
       chatsIndex: (feed + chats).map{ |a| a[:id] } ,
-      chatsObjects: (feed + chats).reduce({}) { |memo, a| memo[a[:id]] = a ; memo },
+      promptsIndex: prompts.map(&:key),
+      chatsObjects: chatsObjects,
       chatsCommands: [
         # {id: chats[0][:id], duration: 300, delay: 300},
         # {id: chats[1][:id], duration: 300, delay: 300},
