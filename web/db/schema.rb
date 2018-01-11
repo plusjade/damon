@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180107000043) do
+ActiveRecord::Schema.define(version: 20180109042751) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,19 @@ ActiveRecord::Schema.define(version: 20180107000043) do
     t.bigint   "category_id",  null: false
     t.index ["occurred_at"], name: "index_entries_on_occurred_at", using: :btree
     t.index ["user_id"], name: "index_entries_on_user_id", using: :btree
+  end
+
+  create_table "prompts", force: :cascade do |t|
+    t.string   "key"
+    t.string   "prompt"
+    t.string   "custom_prompt"
+    t.text     "choices",       default: [],              array: true
+    t.integer  "position"
+    t.integer  "category_id"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["category_id"], name: "index_prompts_on_category_id", using: :btree
+    t.index ["key", "category_id"], name: "index_prompts_on_key_and_category_id", unique: true, using: :btree
   end
 
   create_table "users", force: :cascade do |t|
