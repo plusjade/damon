@@ -27,6 +27,7 @@ gem 'rack-cors'
 gem 'aws-sdk', '~> 2'
 gem 'active_model_serializers', '~> 0'
 gem 'rollbar'
+gem 'google-id-token'
 
 gem 'haml-rails'
 gem 'bourbon'
