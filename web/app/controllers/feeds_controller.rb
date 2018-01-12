@@ -1,13 +1,14 @@
-class FeedsController < ActionController::Base
+class FeedsController < ApplicationController
+  before_action :authenticate!
+
   def show
-    user = User.find(params[:user_id])
-    category = Category.where(user_id: user.id, name: params[:category_name]).first
+    category = Category.where(user_id: current_user.id, name: params[:category_name]).first
     raise ActiveRecord::RecordNotFound unless category
 
-    f = Feed.new(user_id: user.id, category_name: params[:category_name])
+    f = Feed.new(user_id: current_user.id, category_name: params[:category_name])
     feed = f.feed
     chats = begin
-      CategoryList.new(user_id: user.id).data_for_category(params[:category_name])[:summaries].map.with_index do |value, i|
+      CategoryList.new(user_id: current_user.id).data_for_category(params[:category_name])[:summaries].map.with_index do |value, i|
         {
           id: Digest::MD5.hexdigest(value),
           type: "botEntry",

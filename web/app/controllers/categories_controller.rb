@@ -1,7 +1,9 @@
-class CategoriesController < ActionController::Base
+class CategoriesController < ApplicationController
+
+  before_action :authenticate!
+
   def index
-    user = User.find(params[:user_id])
-    category_list = CategoryList.new(user_id: user.id)
+    category_list = CategoryList.new(user_id: current_user.id)
 
     categories_objects = category_list.payload.reduce({}) { |m, c| m[c[:name]] = c; m }
 
