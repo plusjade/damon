@@ -1,7 +1,15 @@
 class Category < ApplicationRecord
   has_many :entries
   has_many :prompts
-  belongs_to :user
+  belongs_to :user, dependent: :destroy
+
+  before_save :normalize
+
+  def normalize
+    if name
+      self.name = name.to_s.downcase
+    end
+  end
 
   def self.populate(category_id)
     category = Category.find(category_id)
