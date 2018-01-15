@@ -1,7 +1,7 @@
 class ChatsController < ApplicationController
   def index
     category = params[:scat].presence.to_s
-    category = (/\A[a-zA-Z]+\z/).match?(category) ? category : "exercise"
+    category = (/\A[\w\-]+\z/).match?(category) ? category : "exercise"
 
     data = home(category)
     chatsObjects = data.reduce({}) { |memo, a| memo[a[:id]] = a ; memo }
