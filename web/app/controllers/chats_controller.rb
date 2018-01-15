@@ -1,91 +1,56 @@
 class ChatsController < ApplicationController
-  before_action :authenticate!
-
   def index
+    category = params[:scat].presence.to_s
+    category = (/\A[a-zA-Z]+\z/).match?(category) ? category : "exercise"
+
+    data = home(category)
+    chatsObjects = data.reduce({}) { |memo, a| memo[a[:id]] = a ; memo }
     render json: {
       chatsIndex: [],
-      chatsObjects: home.reduce({}) { |memo, a| memo[a[:id]] = a ; memo },
+      chatsObjects: chatsObjects,
       chatsCommands: [
-        {id: 1, duration: 2000, delay: 300},
-        {id: 2, duration: 1600, delay: 1000},
-        {id: 3, duration: 1000, delay: 1000},
-        {id: 4, duration: 800, delay: 1000},
-        {id: 5, duration: 1000, delay: 1000},
-        {id: 6, duration: 800, delay: 1000},
-        {id: 7, duration: 1000, delay: 1000},
-        {id: 8, duration: 1500, delay: 1000},
-        {id: 9, duration: 1500, delay: 2000},
+        {id: data[0][:id], duration: 1000, delay: 300},
+        {id: data[1][:id], duration: 1600, delay: 1000},
+        {id: data[2][:id], duration: 1000, delay: 1400},
+        {id: data[3][:id], duration: 1000, delay: 2000},
+        {id: data[4][:id], duration: 1000, delay: 1400},
+        {id: data[5][:id], duration: 1000, delay: 1000},
       ]
     }
   end
 
-  private def home
+  private def home(category)
     [
       {
-        id: 1,
         type: "botEntry",
-        value: "Hello there! 👋",
+        value: "Hello there! 👋 I'm positive buddy 🤪",
         emoji: "🤖",
-        timestamp: Time.now.to_i,
-        type: "theirs",
       },
       {
-        id: 2,
         type: "botEntry",
-        value: "I'm positive buddy 🤪",
-        timestamp: (Time.now + 10.seconds).to_i,
-        type: "theirs",
-      },
-      {
-        id: 3,
-        type: "botEntry",
-        value: "💡💡💡 I'm not that bright....",
+        value: "Jade told me you'd like to track your #{category} habits",
         emoji: "",
-        type: "theirs",
       },
       {
-        id: 4,
         type: "botEntry",
-        value: "🤔",
+        value: "I can help! Just text me stuff whenever, I'll keep track of everything.",
         emoji: "",
-        type: "theirs",
-      },
-
-      {
-        id: 5,
-        type: "botEntry",
-        value: "yet!",
-        emoji: "",
-        type: "theirs",
       },
       {
-        id: 6,
-        type: "botEntry",
-        value: "But over time I'll learn more about the world.",
-        emoji: "",
-        type: "theirs",
-      },
-      {
-        id: 7,
-        type: "botEntry",
-        value: "And help you on your journey.",
-        emoji: "",
-        type: "theirs",
-      },
-      {
-        id: 8,
         type: "botEntry",
         value: "Let's do it! 💪",
         emoji: "",
-        type: "theirs",
       },
       {
-        id: 9,
         type: "botEntry",
-        value: "btw, I'm a feminist ^_^",
+        value: "Please log in with Google so only you can see our chats 😇",
         emoji: "",
-        type: "theirs",
       },
-    ]
+      {
+        type: "googleSignIn",
+        value: "googleSignIn"
+      },
+
+    ].map { |a| a[:id] = Digest::MD5.hexdigest(a[:value]); a }
   end
 end

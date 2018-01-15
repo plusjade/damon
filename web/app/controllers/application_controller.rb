@@ -24,10 +24,8 @@ class ApplicationController < ActionController::API
     client_id = $sesames["google_signin"]["client_id"][Rails.env]
     validator = GoogleIDToken::Validator.new
     response = validator.check(token, client_id)
-    attributes = {}
-    if params[:signup_category].present?
-      attributes[:signup_category] = params[:signup_category]
-    end
+    attributes = {signup_category: params[:scat].presence}
+
     @current_user = User.find_or_create_from_google(response, attributes)
   rescue GoogleIDToken::ValidationError => e
     Rollbar.error(e)
