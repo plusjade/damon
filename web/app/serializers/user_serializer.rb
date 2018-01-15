@@ -1,6 +1,4 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :email
-
   attribute :userName do
     object.given_name
   end
