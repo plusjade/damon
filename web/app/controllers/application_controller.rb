@@ -9,7 +9,7 @@ class ApplicationController < ActionController::API
   attr_reader :current_user
 
   def authenticate!
-    token = request.headers["HTTP_AUTHORIZATION"].presence
+    token = request.headers["HTTP_AUTHORIZATION"].presence || params[:token]
     raise Unauthorized unless token
     token = token.split(/\s+/).last
     @current_user = User.find_by_access_token(token)
@@ -18,7 +18,7 @@ class ApplicationController < ActionController::API
   end
 
   def authenticate_from_google!
-    token = request.headers["HTTP_AUTHORIZATION"].presence
+    token = request.headers["HTTP_AUTHORIZATION"].presence || params[:token]
     raise Unauthorized unless token
     token = token.split(/\s+/).last
     client_id = $sesames["google_signin"]["client_id"][Rails.env]
