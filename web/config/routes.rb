@@ -7,5 +7,8 @@ Rails.application.routes.draw do
     resources :chats, only: [:index]
     resources :feeds, param: :category_name, only: [:show]
     resources :entries
+    resources :users, only: [:index] do
+      post :auth, on: :collection
+    end
   end
 end

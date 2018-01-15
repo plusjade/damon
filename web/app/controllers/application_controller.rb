@@ -12,10 +12,23 @@ class ApplicationController < ActionController::API
     token = request.headers["HTTP_AUTHORIZATION"].presence
     raise Unauthorized unless token
     token = token.split(/\s+/).last
+    @current_user = User.find_by_access_token(token)
+
+    raise Unauthorized unless current_user
+  end
+
+  def authenticate_from_google!
+    token = request.headers["HTTP_AUTHORIZATION"].presence
+    raise Unauthorized unless token
+    token = token.split(/\s+/).last
     client_id = $sesames["google_signin"]["client_id"][Rails.env]
     validator = GoogleIDToken::Validator.new
     response = validator.check(token, client_id)
-    @current_user = User.find_or_create_from_google(response)
+    attributes = {}
+    if params[:signup_category].present?
+      attributes[:signup_category] = params[:signup_category]
+    end
+    @current_user = User.find_or_create_from_google(response, attributes)
   rescue GoogleIDToken::ValidationError => e
     Rollbar.error(e)
     raise Unauthorized
