@@ -253,6 +253,7 @@ DEPENDENCIES
   pry
   pry-byebug
   pry-rails
+  rack (= 2.0.3)
   rack-cors
   rails (~> 5.1)
   rails-assets-es5-shim (~> 4.1.3)!
