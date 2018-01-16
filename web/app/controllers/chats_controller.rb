@@ -28,29 +28,34 @@ class ChatsController < ApplicationController
       },
       {
         type: "botEntry",
-        value: "Jade told me you'd like to track your #{category} habits",
-        emoji: "",
+        value: [
+          {value: "Jade told me you'd like to track your "},
+          {value: category, type: "strong"},
+          {value: " habits."},
+        ],
       },
       {
         type: "botEntry",
-        value: "I can help! Just text me stuff whenever, I'll keep track of everything.",
-        emoji: "",
+        value: [
+          {value: "I can help! ", type: "p"},
+          {value: "Just text me stuff whenever, I'll keep track of everything.", type: "p"},
+        ],
       },
       {
         type: "botEntry",
         value: "Let's do it! 💪",
-        emoji: "",
       },
       {
         type: "botEntry",
         value: "Please log in with Google so only you can see our chats 😇",
-        emoji: "",
       },
       {
         type: "googleSignIn",
         value: "googleSignIn"
       },
-
-    ].map { |a| a[:id] = Digest::MD5.hexdigest(a[:value]); a }
+    ].map do |a|
+      a[:id] = Digest::MD5.hexdigest(a[:value].to_s)
+      a
+    end
   end
 end
