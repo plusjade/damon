@@ -22,7 +22,8 @@ class Feed
 
     collector = steps.reduce({}) { |memo, step| memo[step] = [] ; memo}
 
-    recent_dates = Entry.recent_dates_by_ordinal(reverse: false).dup
+    oldest_days_ago = entries.first.try(:days_ago).to_i + 1
+    recent_dates = Entry.recent_dates_by_ordinal(reverse: false, days_back: oldest_days_ago).dup
 
     result.each do |e|
       cache = []
@@ -107,11 +108,13 @@ class Feed
   end
 
   def entries
-    query = Entry.ascending.where(user_id: user_id)
-    if category_name == "all"
-      query
-    else
-      query.where(category: category)
+    @entries ||= begin
+      query = Entry.ascending.where(user_id: user_id)
+      if category_name == "all"
+        query.to_a
+      else
+        query.where(category: category).to_a
+      end
     end
   end
 end
