@@ -22,6 +22,8 @@ class Feed
 
     collector = steps.reduce({}) { |memo, step| memo[step] = [] ; memo}
 
+    recent_dates = Entry.recent_dates_by_ordinal(reverse: false).dup
+
     result.each do |e|
       cache = []
       days_ago = e[:days_ago]
@@ -39,18 +41,54 @@ class Feed
       end
     end
 
-    collector.reduce([]) do |memo, (step, entries)|
+
+    result = collector.reduce([]) do |memo, (step, entries)|
       value = "#{step} days"
       value = "Yesterday" if step == 1
       value = "Today" if step == 0
-      memo << {
-        id: Digest::MD5.hexdigest(value),
-        type: "banner",
-        value: value,
-        color: "#333",
-      }
+      # memo << {
+      #   id: Digest::MD5.hexdigest(value),
+      #   type: "banner",
+      #   value: value,
+      #   color: "#333",
+      # }
 
       memo + entries
+    end
+
+    result.each do |entry|
+      recent_dates[Ordinal.from_time(entry[:occurred_at])] << entry
+    end
+
+    today = Time.now.in_time_zone(PT).to_date
+    recent_dates.reduce([]) do |memo, (ordinal, entries)|
+      days_ago = (today - Ordinal.to_time(ordinal).in_time_zone(PT).to_date).to_i
+      value = ""
+      if steps.include?(days_ago)
+        value = "#{days_ago} days - "
+        value = "Yesterday - " if days_ago == 1
+        value = "Today - " if days_ago == 0
+      end
+
+      memo << {
+        id: rand,
+        type: "banner",
+        value: "#{value} #{Ordinal.to_date(ordinal, "%a %b %d")}",
+        color: "#333",
+      }
+      memo += entries
+
+      if entries.count.zero?
+        memo << {
+          id: rand,
+          type: "entryPlaceholder",
+          value: "😴",
+          day: "#{Ordinal.to_date ordinal}",
+          color: "#333",
+        }
+      end
+
+      memo
     end
   end
 

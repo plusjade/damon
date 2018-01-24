@@ -11,7 +11,7 @@ class Ordinal
     Date.strptime(ordinal, ORDINAL_FORMAT).in_time_zone(PT)
   end
 
-  def self.to_date(ordinal)
-    to_time(ordinal).strftime(DATE_FORMAT).upcase
+  def self.to_date(ordinal, date_format=DATE_FORMAT)
+    to_time(ordinal).strftime(date_format)
   end
 end

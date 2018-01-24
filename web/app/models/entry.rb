@@ -9,7 +9,7 @@ class Entry < ApplicationRecord
   scope :ascending, -> { order("occurred_at asc") }
   scope :descending, -> { order("occurred_at desc") }
 
-  RECENT_DAYS = 56
+  RECENT_DAYS = 100
   HASHTAG_REGEX = /#(\w+)/
 # http://clrs.cc/
   MONTH_COLORS = %w(
@@ -88,8 +88,11 @@ class Entry < ApplicationRecord
     end
   end
 
-  def self.recent_dates_by_ordinal
-    (RECENT_DAYS.days.ago.to_date..Date.today).to_a.reverse.reduce({}) do |memo, date|
+  def self.recent_dates_by_ordinal(reverse: true)
+    today = Time.now.in_time_zone(PT).to_date
+    days = (RECENT_DAYS.days.ago.to_date..today).to_a
+    days = days.reverse if reverse
+    days.reduce({}) do |memo, date|
       memo[Ordinal.from_time(date)] = []
       memo
     end

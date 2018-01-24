@@ -5,6 +5,10 @@ class EntrySerializer < ActiveModel::Serializer
     :entry
   end
 
+  attribute :occurred_at do
+    object.occurred_at
+  end
+
   attribute :timestamp do
     object.occurred_at.to_i
   end
