@@ -9,7 +9,7 @@ class Entry < ApplicationRecord
   scope :ascending, -> { order("occurred_at asc") }
   scope :descending, -> { order("occurred_at desc") }
 
-  RECENT_DAYS = 100
+  RECENT_DAYS = 140
   HASHTAG_REGEX = /#(\w+)/
 # http://clrs.cc/
   MONTH_COLORS = %w(
