@@ -3,23 +3,23 @@ class FeedsController < ApplicationController
 
   def show
     category = Category.where(user_id: current_user.id, name: params[:category_name]).first
-    raise ActiveRecord::RecordNotFound unless category
+    #raise ActiveRecord::RecordNotFound unless category
 
     f = Feed.new(user_id: current_user.id, category_name: params[:category_name])
     feed = f.feed
-    chats = begin
-      CategoryList.new(user_id: current_user.id).data_for_category(params[:category_name])[:summaries].map.with_index do |value, i|
-        {
-          id: Digest::MD5.hexdigest(value),
-          type: "botEntry",
-          value: value,
-          emoji: i.zero? ? "🤖" : nil,
-        }
-      end
-    end
-    # chats = []
+    # chats = begin
+    #   CategoryList.new(user_id: current_user.id).data_for_category(params[:category_name])[:summaries].map.with_index do |value, i|
+    #     {
+    #       id: Digest::MD5.hexdigest(value),
+    #       type: "botEntry",
+    #       value: value,
+    #       emoji: i.zero? ? "🤖" : nil,
+    #     }
+    #   end
+    # end
+    chats = []
 
-    prompts = category.prompts.sorted.to_a
+    prompts = category ? category.prompts.sorted.to_a : []
     promptsObjects = prompts.reduce({}) { |memo, a| memo[a[:key]] = PromptSerializer.new(a); memo}
 
     chatsObjects = (feed + chats).reduce({}) { |memo, a| memo[a[:id]] = a ; memo }

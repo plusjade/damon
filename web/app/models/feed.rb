@@ -10,7 +10,7 @@ class Feed
 
   def feed
     result = entries.map do |entry|
-      EntrySerializer.new(entry).as_json.merge({category: category.name})
+      EntrySerializer.new(entry).as_json
     end
 
     max = result.first ? result.first[:days_ago] + 1 : 0
@@ -63,18 +63,28 @@ class Feed
     today = Time.now.in_time_zone(PT).to_date
     recent_dates.reduce([]) do |memo, (ordinal, entries)|
       days_ago = (today - Ordinal.to_time(ordinal).in_time_zone(PT).to_date).to_i
-      value = ""
+      value = "#{time_ago_in_words(days_ago.days.ago)} ago "
       if steps.include?(days_ago)
-        value = "#{days_ago} days - "
-        value = "Yesterday - " if days_ago == 1
-        value = "Today - " if days_ago == 0
+        # value = "#{days_ago} days - "
+        value = "Yesterday " if days_ago == 1
+        value = "Today " if days_ago == 0
       end
+
+
 
       memo << {
         id: rand,
         type: "banner",
-        value: "#{value} #{Ordinal.to_date(ordinal, "%a %b %d")}",
-        color: "#333",
+        value: [
+          {
+            value: value,
+            type: "span",
+          },
+          {
+            value: Ordinal.to_date(ordinal, "%a %b %d"),
+            type: "span",
+          }
+        ],
       }
       memo += entries
 
@@ -97,6 +107,11 @@ class Feed
   end
 
   def entries
-    Entry.ascending.where(user_id: user_id, category: category)
+    query = Entry.ascending.where(user_id: user_id)
+    if category_name == "all"
+      query
+    else
+      query.where(category: category)
+    end
   end
 end

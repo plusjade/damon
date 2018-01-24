@@ -10,4 +10,22 @@ class Category < ApplicationRecord
       self.name = name.to_s.downcase
     end
   end
+
+  def emoji
+    if name == "instacart"
+      "🥕"
+    elsif name == "family"
+      "👨‍👩‍👧‍👦"
+    elsif %w(relationships dating).include?(name)
+      "👩"
+    elsif %w(project).include?(name)
+      "🤓"
+    elsif %w(gym exercise).include?(name)
+      "🏋️"
+    elsif name == "chess"
+      "♜"
+    elsif name == "reading"
+      "📚"
+    end
+  end
 end

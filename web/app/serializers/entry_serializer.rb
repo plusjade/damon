@@ -9,16 +9,12 @@ class EntrySerializer < ActiveModel::Serializer
     object.occurred_at
   end
 
-  attribute :timestamp do
-    object.occurred_at.to_i
-  end
-
   attribute :value do
-    object.value.presence || "-" # "automatic ##{category.name}"
+    (object.value.presence || "") + " ##{object.category.name}"
   end
 
-  attribute :day do
-    Ordinal.to_date(object.ordinal)
+  attribute :minorValue do
+    object.category.emoji
   end
 
   attribute :days_ago
