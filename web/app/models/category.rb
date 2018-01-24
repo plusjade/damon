@@ -26,6 +26,8 @@ class Category < ApplicationRecord
       "♜"
     elsif name == "reading"
       "📚"
+    else
+      "🗄️"
     end
   end
 end
