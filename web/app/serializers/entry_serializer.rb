@@ -10,7 +10,7 @@ class EntrySerializer < ActiveModel::Serializer
   end
 
   attribute :value do
-    (object.value.presence || "") + " ##{object.category.name}"
+    object.value.presence || ""
   end
 
   attribute :minorValue do
