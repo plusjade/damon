@@ -36,6 +36,7 @@ class EntriesController < ApplicationController
     category_name = params[:category].to_s.strip.downcase.presence
     category_name = nil if category_name == "all"
     category_name ||= "uncategorized"
+    category_name = Category.normalize_name(category_name)
     category = Category.find_or_create_by!(name: category_name, user: current_user)
     raise ActiveRecord::RecordNotFound unless category
 

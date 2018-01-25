@@ -5,9 +5,10 @@ class Category < ApplicationRecord
 
   before_save :normalize
 
+
   def normalize
     if name
-      self.name = name.to_s.downcase
+      self.name = self.class.normalize_name(name)
     end
   end
 
@@ -29,5 +30,9 @@ class Category < ApplicationRecord
     else
       "🗄️"
     end
+  end
+
+  def self.normalize_name(name)
+    name.to_s.downcase.gsub(/\W+/, "-").gsub(/\-+/, "-").gsub(/^-|-$/, "")
   end
 end
