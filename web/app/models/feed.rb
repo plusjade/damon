@@ -74,7 +74,7 @@ class Feed
 
 
       memo << {
-        id: rand,
+        id: "banner|#{Digest::MD5.hexdigest(ordinal)}",
         type: "banner",
         value: [
           {
@@ -91,8 +91,8 @@ class Feed
 
       if entries.count.zero?
         memo << {
-          id: rand,
-          type: "entryPlaceholder",
+          id: "emptyEntry|#{Digest::MD5.hexdigest(ordinal)}",
+          type: "emptyEntry",
           value: "😴",
           day: "#{Ordinal.to_date ordinal}",
           color: "#333",
