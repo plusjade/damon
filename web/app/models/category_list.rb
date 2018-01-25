@@ -97,7 +97,7 @@ class CategoryList
       summary: summary,
       total: total_entries,
       emoji_id: emoji,
-      emoji: EMOJIS[emoji],
+      health: EMOJIS[emoji],
       daysAgo: days_since_last,
       summaries: [
         ("Your adventure is brand new! #{EMOJIS[emoji]}" if days_since_last.nil?),
