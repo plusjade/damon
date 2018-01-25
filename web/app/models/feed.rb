@@ -64,18 +64,17 @@ class Feed
     today = Time.now.in_time_zone(PT).to_date
     recent_dates.reduce([]) do |memo, (ordinal, entries)|
       days_ago = (today - Ordinal.to_time(ordinal).in_time_zone(PT).to_date).to_i
-      value = "#{time_ago_in_words(days_ago.days.ago)} ago "
+      value = "#{days_ago} days ago "
       if steps.include?(days_ago)
         # value = "#{days_ago} days - "
         value = "Yesterday " if days_ago == 1
         value = "Today " if days_ago == 0
       end
 
-
-
       memo << {
         id: "banner|#{Digest::MD5.hexdigest(ordinal)}",
         type: "banner",
+        isEmpty: entries.count.zero?,
         value: [
           {
             value: value,
