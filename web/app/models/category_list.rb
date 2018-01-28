@@ -94,6 +94,7 @@ class CategoryList
 
     {
       name: category,
+      emoji: categories_by_name[category].emoji,
       summary: summary,
       total: total_entries,
       emoji_id: emoji,
@@ -131,10 +132,16 @@ class CategoryList
 
   def category_ids_by_name
     @category_ids_by_name ||= begin
-      Category.where(user_id: user_id).all.select(:id, :name).reduce({}) do |memo, cat|
+      categories_by_name.values.reduce({}) do |memo, cat|
         memo[cat.name] = cat.id
         memo
       end
+    end
+  end
+
+  def categories_by_name
+    @categories_by_name ||= begin
+      Category.where(user_id: user_id).all.select(:id, :name).index_by(&:name)
     end
   end
 end
