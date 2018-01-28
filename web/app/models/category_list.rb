@@ -22,11 +22,7 @@ class CategoryList
     category_totals_by_name.keys.map do |category|
       data_for_category(category)
     end.sort do |a, b|
-      if a[:emoji_id] == b[:emoji_id]
-        a[:name] <=> b[:name]
-      else
-        a[:emoji_id] <=> b[:emoji_id]
-      end
+      a[:name] <=> b[:name]
     end
   end
 
