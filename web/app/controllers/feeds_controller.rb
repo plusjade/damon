@@ -7,17 +7,17 @@ class FeedsController < ApplicationController
 
     f = Feed.new(user_id: current_user.id, category_name: params[:category_name])
     feed = f.feed
-    # chats = begin
-    #   CategoryList.new(user_id: current_user.id).data_for_category(params[:category_name])[:summaries].map.with_index do |value, i|
-    #     {
-    #       id: Digest::MD5.hexdigest(value),
-    #       type: "botEntry",
-    #       value: value,
-    #       emoji: i.zero? ? "🤖" : nil,
-    #     }
-    #   end
-    # end
     chats = []
+    chats = begin
+      CategoryList.new(user_id: current_user.id).data_for_category(params[:category_name])[:summaries].map.with_index do |value, i|
+        {
+          id: Digest::MD5.hexdigest(value),
+          type: "botEntry",
+          value: value,
+          emoji: i.zero? ? "🤖" : nil,
+        }
+      end
+    end unless params[:category_name] == "all"
 
     prompts = category ? category.prompts.sorted.to_a : []
     promptsObjects = prompts.reduce({}) { |memo, a| memo[a[:key]] = PromptSerializer.new(a); memo}
