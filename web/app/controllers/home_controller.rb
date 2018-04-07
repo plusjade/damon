@@ -1,5 +1,5 @@
 class HomeController < ActionController::Base
-  layout "chocolate"
   def index
+    render plain: "🐶 Hello! I am an API server"
   end
 end
